@@ -40,7 +40,7 @@ class RecentMovements extends TableWidget
                 TextColumn::make('concept')
                     ->searchable(),
                 TextColumn::make('amount')
-                    ->money(fn() => auth()->user()->currency->code ?? 'USD')
+                    ->money(fn() => auth()->user()->currency->short ?? 'USD')
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()

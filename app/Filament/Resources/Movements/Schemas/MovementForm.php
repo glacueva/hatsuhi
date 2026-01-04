@@ -33,7 +33,6 @@ class MovementForm
                 TextInput::make('amount')
                     ->required()
                     ->numeric()
-                    ->rules(['min:0.01'])
             ]);
     }
 }

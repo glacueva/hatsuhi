@@ -27,6 +27,10 @@ use App\Filament\Widgets\StatsOverview;
 use App\Filament\Widgets\ActualIncomeVsActualExpense;
 use App\Filament\Widgets\UpcomingAlarms;
 
+
+use Illuminate\Support\HtmlString;
+
+
 class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
@@ -36,6 +40,9 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->brandLogo(fn () => view('assets.logo'))
+            ->brandName('Hatsuhi')
+            ->brandLogoHeight('auto')
             ->colors([
                 'primary' => Color::Emerald,
             ])

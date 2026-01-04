@@ -29,7 +29,7 @@ class ExpenseCategoryByMonthChart extends ChartWidget
                 [
                     'label' => 'Expense',
                     'data' => array_values($data), 
-                    'backgroundColor' => $this->getRandomRedColorsFromDatasetSize( count($data) ),
+                    'backgroundColor' => $this->getRandomRedColorsFromDataset( $data ),
                 ],
             ],
             'labels' => array_keys($data),
@@ -41,13 +41,11 @@ class ExpenseCategoryByMonthChart extends ChartWidget
         return 'pie';
     }
 
-    private function getRandomRedColorsFromDatasetSize(int $size): array
+    private function getRandomRedColorsFromDataset(array $data): array
     {
         $colors = [];
-        $min_color = 100;
-        for($i = 0; $i < $size; $i++) {
-            $color = $min_color + ($i * 5);
-            $colors[] = 'rgba(255, 100, ' . $color . ')';
+        foreach($data as $value) {
+            $colors[] = 'rgba(255, ' . $value%128 . ', ' . $value%256 . ')';
         }
 
         return $colors;
