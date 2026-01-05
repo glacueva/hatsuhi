@@ -19,7 +19,7 @@ class MovementTypeForm
                 Toggle::make('is_positive')
                     ->label('Positive Movement')
                     ->helperText('Toggle ON for income, OFF for expense')
-                    ->default(true)
+                    ->default(false)
                     ->required(),
             ]);
     }

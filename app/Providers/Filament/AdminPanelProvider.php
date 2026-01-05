@@ -40,6 +40,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->databaseNotifications()
             ->brandLogo(fn () => view('assets.logo'))
             ->brandName('Hatsuhi')
             ->brandLogoHeight('auto')

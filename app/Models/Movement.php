@@ -34,21 +34,33 @@ class Movement extends Model
         return $this->belongsTo(MovementCategory::class, 'movement_category_id');
     }
 
-    // Accessor for movement type
-    public function getMovementTypeAttribute()
+    public function movementType()
     {
-        return $this->category->movementType ?? null;
+        return $this->hasOneThrough(MovementType::class, MovementCategory::class);
     }
 
-    // Accessor for formatted amount
-    public function getFormattedAmountAttribute()
+    public function getAbsoluteAmountAttribute(): float
     {
-        $currencySymbol = $this->user->currency->symbol ?? '$';
-        $amount = number_format($this->amount, 2);
-        
-        return $this->isPositive() ? 
-            "+{$currencySymbol}{$amount}" : 
-            "-{$currencySymbol}{$amount}";
+        return abs($this->amount);
+    }
+
+
+    // accessor for compensation
+    public function getCompensationAttribute(): bool
+    {
+        return $this->isCompensation();
+    }
+
+    // accessor for compensation
+    public function getIsCompensationAttribute(): string
+    {
+        return $this->isCompensation() ? 'Yes' : 'No';
+    }
+
+     // Helper method to check if movement is a compensation
+    public function isCompensation(): bool
+    {
+        return $this->amount < 0;
     }
 
     // Helper method to check if movement is positive

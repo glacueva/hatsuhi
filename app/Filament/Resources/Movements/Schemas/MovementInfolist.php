@@ -16,14 +16,12 @@ class MovementInfolist
                 TextEntry::make('date')
                     ->date(),
                 TextEntry::make('concept'),
-                TextEntry::make('amount')
+                TextEntry::make('absolute_amount')
                     ->numeric(),
+                TextEntry::make('is_compensation'),
                 TextEntry::make('created_at')
                     ->dateTime()
-                    ->placeholder('-'),
-                TextEntry::make('updated_at')
-                    ->dateTime()
-                    ->placeholder('-'),
+                    ->placeholder('-')
             ]);
     }
 }

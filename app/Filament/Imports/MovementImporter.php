@@ -3,8 +3,8 @@
 namespace App\Filament\Imports;
 
 use App\Models\Movement;
-use App\Models\MovementCategory;
 use App\Models\MovementType;
+use App\Models\MovementCategory;
 use Filament\Actions\Imports\ImportColumn;
 use Filament\Actions\Imports\Importer;
 use Filament\Actions\Imports\Models\Import;
@@ -17,12 +17,12 @@ class MovementImporter extends Importer
     public static function getColumns(): array
     {
         return [
-            ImportColumn::make('type_name')
-                ->label('Type (Text)')
+            ImportColumn::make('type_name_string')
+                ->label('Type Name')
                 ->requiredMapping(),
-            
-            ImportColumn::make('category_name')
-                ->label('Category (Text)')
+
+            ImportColumn::make('category_name_string')
+                ->label('Category Name')
                 ->requiredMapping(),
 
             ImportColumn::make('date')
@@ -35,46 +35,51 @@ class MovementImporter extends Importer
             ImportColumn::make('amount')
                 ->numeric()
                 ->requiredMapping(),
+
+            ImportColumn::make('compensation_flag')
+                ->label('Compensation (Bool)')
+                ->boolean()
+                ->requiredMapping(),
         ];
     }
 
-    protected function beforeSave(): void
+    public function resolveRecord(): ?Movement
     {
+        $userId = $this->getImport()->user_id ?? auth()->id();
         
-        $originalAmount = (float) $this->data['amount'];
-        $typeName = $this->data['type_name'];
-        $categoryName = $this->data['category_name'];
-        $user_id = auth()->id();
-        
-        $type = MovementType::firstOrCreate(
-            [
-                'name' => $typeName,
-                'is_positive' => $originalAmount >= 0 ? 1 : 0,
-                'user_id' => $user_id
-            ]
-        );
+        $type = MovementType::firstOrCreate([
+            'name' => $this->data['type_name_string'],
+            'user_id' => $userId
+        ]);
 
-        $category = MovementCategory::firstOrCreate(
-            [
-                'name' => $categoryName,
-                'movement_type_id' => $type->id,
-                'user_id' => $user_id
-            ]
-        );
+        $category = MovementCategory::firstOrCreate([
+            'name' => $this->data['category_name_string'],
+            'movement_type_id' => $type->id,
+            'user_id' => $userId
+        ]);
 
-        $this->record->movement_category_id = $category->id;
-        $this->record->user_id = $user_id;
-        $this->record->amount = abs($originalAmount);
+        $record = Movement::firstOrNew([
+            'user_id' => $userId,
+            'date' => $this->data['date'],
+            'concept' => $this->data['concept'],
+            'amount' => $this->calculateAmount(),
+            'movement_category_id' => $category->id,
+        ]);
+
+        return $record;
     }
 
-    public function resolveRecord(): Movement
+    protected function calculateAmount(): float
     {
-        return new Movement();
+        $amount = abs((float) $this->data['amount']);
+        $isCompensation = (bool) $this->data['compensation_flag'];
+
+        return $isCompensation ? -$amount : $amount;
     }
 
     public static function getCompletedNotificationBody(Import $import): string
     {
-        $body = 'Your movement import has completed and ' . Number::format($import->successful_rows) . ' ' . str('row')->plural($import->successful_rows) . ' imported.';
+        $body = 'Your movements list import has completed and ' . Number::format($import->successful_rows) . ' ' . str('row')->plural($import->successful_rows) . ' imported.';
 
         if ($failedRowsCount = $import->getFailedRowsCount()) {
             $body .= ' ' . Number::format($failedRowsCount) . ' ' . str('row')->plural($failedRowsCount) . ' failed to import.';

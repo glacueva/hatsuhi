@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Movements\Schemas;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
 
 class MovementForm
@@ -33,6 +34,12 @@ class MovementForm
                 TextInput::make('amount')
                     ->required()
                     ->numeric()
+                    ->rules(['min:0.01']),
+                Toggle::make('compensation')
+                    ->label('Is it a Compensation?')
+                    ->helperText('A compensation happens when a return happens: e.g you have to return money from a previous Income Movement and you do not want to edit that M.ovement. It happens also the other way round, a previous Expense is compensated for example the return of a purchase.')
+                    ->default(false)
+                    ->required(),
             ]);
     }
 }

@@ -16,4 +16,11 @@ class ViewMovement extends ViewRecord
             EditAction::make(),
         ];
     }
+
+    protected function mutateFormDataBeforeView(array $data): array 
+    { 
+        //always show positive amounts in form
+        $data['amount'] = abs($data['amount']); 
+        return $data; 
+    }
 }

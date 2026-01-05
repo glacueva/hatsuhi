@@ -9,7 +9,9 @@ use Filament\Actions\ViewAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\CreateAction;
 use Filament\Actions\ImportAction;
+use Filament\Actions\ExportBulkAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Table;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\Filter;
@@ -19,6 +21,7 @@ use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
 
 use App\Filament\Imports\MovementImporter;
+use App\Filament\Exports\MovementExporter;
 
 class MovementsTable
 {
@@ -37,9 +40,18 @@ class MovementsTable
                 TextColumn::make('amount')
                     ->state(function ($record) {
                         $symbol = $record->user->currency->symbol ?? '$';
-                        return $symbol . $record->amount;
+                        return $symbol . $record->absolute_amount;
                     })
                     ->sortable(),
+                BadgeColumn::make('compensation')
+                    ->label('Compensation')
+                    ->colors([ 
+                        'danger' => fn ($state) => $state === true, 
+                        'gray' => fn ($state) => $state === false, 
+                    ])->icons([
+                        'heroicon-o-arrow-uturn-left' => fn ($state) => $state === true,
+                        'heroicon-o-check' => fn ($state) => $state === false, 
+                    ])->formatStateUsing(fn ($state) => $state ? 'Yes' : 'No'),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -79,6 +91,11 @@ class MovementsTable
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
+                    ExportBulkAction::make()
+                    ->exporter(MovementExporter::class) // La clase que creamos antes
+                    ->label('Export CSV')
+                    ->icon('heroicon-o-arrow-down-circle')
+                    ->color('info')
                 ]),
             ])
             ->headerActions([
@@ -86,7 +103,8 @@ class MovementsTable
                     ->importer(MovementImporter::class) // La clase que creamos antes
                     ->label('Import CSV')
                     ->icon('heroicon-o-arrow-up-tray')
-                    ->color('warning')
+                    ->color('warning'),
+                
             ]);
     }
 }

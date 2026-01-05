@@ -65,4 +65,23 @@ class MovementResource extends Resource
         
         return $query->where('user_id', auth()->id());
     }
+
+    protected function mutateFormDataBeforeCreate(array $data): array 
+    { 
+        // Compensations always comes as a negative number
+        $data['amount'] = $data['compensation'] ? -abs($data['amount']) : abs($data['amount']); 
+    } 
+
+    protected function mutateFormDataBeforeSave(array $data): array 
+    {
+        $data['amount'] = $data['compensation'] ? -abs($data['amount']) : abs($data['amount']); 
+
+        return $data; 
+    }
+    protected function mutateFormDataBeforeFill(array $data): array 
+    { 
+        //always show positive amounts in form
+        $data['amount'] = abs($data['amount']); 
+        return $data; 
+    }
 }
