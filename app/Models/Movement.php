@@ -36,7 +36,9 @@ class Movement extends Model
 
     public function movementType()
     {
-        return $this->hasOneThrough(MovementType::class, MovementCategory::class);
+        return $this->hasOneThrough(MovementType::class, MovementCategory::class,
+            'id','id',
+            'movement_category_id','movement_type_id');
     }
 
     public function getAbsoluteAmountAttribute(): float

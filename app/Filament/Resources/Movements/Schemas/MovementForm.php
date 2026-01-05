@@ -37,7 +37,7 @@ class MovementForm
                     ->rules(['min:0.01']),
                 Toggle::make('compensation')
                     ->label('Is it a Compensation?')
-                    ->helperText('A compensation happens when a return happens: e.g you have to return money from a previous Income Movement and you do not want to edit that M.ovement. It happens also the other way round, a previous Expense is compensated for example the return of a purchase.')
+                    ->helperText('A compensation happens when a return happens: e.g you have to return money from a previous Income Movement and you do not want to edit that Movement. It happens also the other way round, a previous Expense is compensated for example the return of a purchase.')
                     ->default(false)
                     ->required(),
             ]);
