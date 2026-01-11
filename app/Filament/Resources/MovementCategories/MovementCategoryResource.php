@@ -10,6 +10,7 @@ use App\Filament\Resources\MovementCategories\Schemas\MovementCategoryForm;
 use App\Filament\Resources\MovementCategories\Schemas\MovementCategoryInfolist;
 use App\Filament\Resources\MovementCategories\Tables\MovementCategoriesTable;
 use App\Models\MovementCategory;
+use UnitEnum;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -23,6 +24,8 @@ class MovementCategoryResource extends Resource
     protected static ?string $model = MovementCategory::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static UnitEnum|string|null $navigationGroup = 'Settings';
+    protected static ?int $sort = 1;
 
     protected static ?string $recordTitleAttribute = 'name';
 

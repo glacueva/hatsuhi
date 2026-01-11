@@ -11,6 +11,7 @@ use App\Filament\Resources\Currencies\Schemas\CurrencyInfolist;
 use App\Filament\Resources\Currencies\Tables\CurrenciesTable;
 use App\Models\Currency;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -21,6 +22,8 @@ class CurrencyResource extends Resource
     protected static ?string $model = Currency::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static UnitEnum|string|null $navigationGroup = 'Settings';
+    protected static ?int $sort = 1;
 
     protected static ?string $recordTitleAttribute = 'name';
 

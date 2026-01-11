@@ -10,6 +10,7 @@ use App\Filament\Resources\MovementAlarms\Schemas\MovementAlarmForm;
 use App\Filament\Resources\MovementAlarms\Schemas\MovementAlarmInfolist;
 use App\Filament\Resources\MovementAlarms\Tables\MovementAlarmsTable;
 use App\Models\MovementAlarm;
+use UnitEnum;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -24,6 +25,8 @@ class MovementAlarmResource extends Resource
     protected static ?string $model = MovementAlarm::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static UnitEnum|string|null $navigationGroup = 'Dash Settings';
+    protected static ?int $sort = 2;
 
     protected static ?string $recordTitleAttribute = 'concept';
 

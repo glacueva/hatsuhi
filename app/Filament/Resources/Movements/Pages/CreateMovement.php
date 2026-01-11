@@ -13,6 +13,8 @@ class CreateMovement extends CreateRecord
     { 
         // Compensations always comes as a negative number
         $data['amount'] = $data['compensation'] ? -abs($data['amount']) : abs($data['amount']); 
+        
+        return $data;
     } 
 
     protected function mutateFormDataBeforeSave(array $data): array 

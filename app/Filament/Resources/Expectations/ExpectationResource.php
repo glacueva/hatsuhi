@@ -10,6 +10,7 @@ use App\Filament\Resources\Expectations\Schemas\ExpectationForm;
 use App\Filament\Resources\Expectations\Schemas\ExpectationInfolist;
 use App\Filament\Resources\Expectations\Tables\ExpectationsTable;
 use App\Models\Expectation;
+use UnitEnum;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -23,6 +24,8 @@ class ExpectationResource extends Resource
     protected static ?string $model = Expectation::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static UnitEnum|string|null $navigationGroup = 'Dash Settings';
+    protected static ?int $sort = 2;
 
     public static function form(Schema $schema): Schema
     {
