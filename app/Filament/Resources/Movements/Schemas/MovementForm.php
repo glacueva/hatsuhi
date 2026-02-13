@@ -7,6 +7,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
+use App\Models\MovementCategory;
 
 class MovementForm
 {
@@ -15,14 +16,16 @@ class MovementForm
         return $schema
             ->components([
                 Select::make('movement_category_id')
-                    ->relationship(
-                        'category',
-                        'name',
-                        fn ($query) => $query->where('user_id', auth()->id())
-                    )
-                    ->required()
-                    ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->movementType->name} - {$record->name}")
-                    ->searchable(['name'])
+                    ->options(function () {
+                        return MovementCategory::query()
+                            ->where('user_id', auth()->id())
+                            ->with('movementType')
+                            ->get()
+                            ->groupBy(fn ($record) => $record->movementType->name) 
+                            ->map(fn ($group) => $group->pluck('name', 'id'))
+                            ->toArray();
+                    })
+                    ->searchable()
                     ->preload()
                     ->required(),
                 DatePicker::make('date')
