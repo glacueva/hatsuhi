@@ -36,10 +36,12 @@
                 $shouldOptionBeDisabled = $isDisabled || $isOptionDisabled($value, $label);
                 $color = $getColor($value);
                 $icon = $getIcon($value);
+                $tooltip = $getTooltip($value);
             @endphp
 
             <div class="fi-fo-toggle-buttons-btn-ctn">
                 <input
+                    @if ($loop->first && $isAutofocused()) autofocus @endif
                     @disabled($shouldOptionBeDisabled)
                     id="{{ $inputId }}"
                     @if (! $isMultiple)
@@ -58,6 +60,7 @@
                     :icon="$icon"
                     :label-sr-only="$areButtonLabelsHidden"
                     tag="label"
+                    :tooltip="$tooltip"
                 >
                     {{ $label }}
                 </x-filament::button>

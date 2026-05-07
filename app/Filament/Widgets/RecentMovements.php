@@ -6,26 +6,29 @@ use App\Models\Movement;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget;
+use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Session;
+use Filament\Tables\Columns\Summarizers\Sum;
 
 class RecentMovements extends TableWidget
 {
-    protected $listeners = ['refreshDashboard' => '$refresh'];
+    use InteractsWithPageFilters;
+
     protected int | string | array $columnSpan = 2;
     protected static ?int $sort = 3;
 
 
     public function table(Table $table): Table
     {
-        $selectedYear = Session::get('dashboard_year', now()->year);
-        $selectedMonth = Session::get('dashboard_month', now()->month);
+        $selectedYear = $this->pageFilters['year'] ?? now()->year;
+        $selectedMonth = $this->pageFilters['month'] ?? now()->month;
         
         return $table
             ->query(function () use ($selectedYear, $selectedMonth): Builder {
                 return Movement::query()
                     ->whereYear('date', $selectedYear)
                     ->whereMonth('date', $selectedMonth)
+                    ->where('user_id', auth()->id())
                     ->latest()
                     ->limit(30);
             })
@@ -41,7 +44,8 @@ class RecentMovements extends TableWidget
                     ->searchable(),
                 TextColumn::make('amount')
                     ->money(fn() => auth()->user()->currency->short ?? 'USD')
-                    ->sortable(),
+                    ->sortable()
+                    ->summarize(Sum::make()),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

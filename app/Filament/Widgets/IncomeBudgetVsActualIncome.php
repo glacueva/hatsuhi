@@ -8,13 +8,13 @@ use App\Models\Views\IncomeMovementView;
 use App\Models\Views\IncomeExpectedView;
 
 use Filament\Widgets\ChartWidget;
-
-use Illuminate\Support\Facades\Session;
+use Filament\Widgets\Concerns\InteractsWithPageFilters;
 
 class IncomeBudgetVsActualIncome extends ChartWidget
 {
+    use InteractsWithPageFilters;
+
     protected ?string $heading = 'Income Budget Vs Actual Income';
-    protected $listeners = ['refreshDashboard' => '$refresh'];
     protected int | string | array $columnSpan = 1;
     protected static ?int $sort = 2;
 
@@ -22,7 +22,7 @@ class IncomeBudgetVsActualIncome extends ChartWidget
     protected function getData(): array
     {
         $user = auth()->user();
-        $currentYear = Session::get('dashboard_year', now()->year);
+        $currentYear = $this->pageFilters['year'] ?? now()->year;
         
         // Get monthly budget data
         $monthlyBudgets = IncomeExpectedView::where('user_id', $user->id)

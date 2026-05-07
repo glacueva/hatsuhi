@@ -465,10 +465,6 @@
                         <h4 class="font-semibold mb-2">Yearly Expectations</h4>
                         <p class="text-sm text-gray-600 dark:text-gray-400">Set and track annual budgets by category</p>
                     </div>
-                    <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md hover:shadow-lg transition-all">
-                        <h4 class="font-semibold mb-2">Movement Alarms</h4>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">Notifications for recurring and one-time transactions</p>
-                    </div>
                 </div>
             </div>
         </section>

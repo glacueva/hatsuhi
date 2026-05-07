@@ -8,13 +8,13 @@ use App\Models\Views\ExpenseMovementView;
 use App\Models\Views\ExpenseExpectedView;
 
 use Filament\Widgets\ChartWidget;
-
-use Illuminate\Support\Facades\Session;
+use Filament\Widgets\Concerns\InteractsWithPageFilters;
 
 class ExpenseBudgetVsActualExpense extends ChartWidget
 {
+    use InteractsWithPageFilters;
+
     protected ?string $heading = 'Expense Budget Vs Actual Expense';
-    protected $listeners = ['refreshDashboard' => '$refresh'];
     protected int | string | array $columnSpan = 1;
     protected static ?int $sort = 2;
 
@@ -22,7 +22,7 @@ class ExpenseBudgetVsActualExpense extends ChartWidget
     protected function getData(): array
     {
         $user = auth()->user();
-        $currentYear = Session::get('dashboard_year', now()->year);
+        $currentYear = $this->pageFilters['year'] ?? now()->year;
         
         // Get monthly budget data
         $monthlyBudgets = ExpenseExpectedView::where('user_id', $user->id)

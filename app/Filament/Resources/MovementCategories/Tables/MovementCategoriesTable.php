@@ -56,10 +56,9 @@ class MovementCategoriesTable
                         // Prevent deletion if there are movements
                         $movCount = $record->movements()->count() > 0;
                         $expCount = $record->expectations()->count() > 0;
-                        $alaCount = $record->alarms()->count() > 0;
 
-                        if ($movCount || $expCount > 0 || $alaCount ) {
-                            throw new \Exception('Cannot delete movement category with existing movements, expectations or alarms.');
+                        if ($movCount || $expCount > 0) {
+                            throw new \Exception('Cannot delete movement category with existing movements or expectations.');
                         }
                     })
             ])

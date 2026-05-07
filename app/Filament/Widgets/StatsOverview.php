@@ -4,22 +4,22 @@ namespace App\Filament\Widgets;
 
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use App\Models\Movement;
 use App\Models\Expectation;
 
-use Illuminate\Support\Facades\Session;
-
 class StatsOverview extends StatsOverviewWidget
 {
-    protected $listeners = ['refreshDashboard' => '$refresh'];
+    use InteractsWithPageFilters;
+
     protected int | string | array $columnSpan = 2;
     protected static ?int $sort = 1;
 
     protected function getStats(): array
     {
         $user = auth()->user();
-        $currentYear = Session::get('dashboard_year', now()->year);
-        $currentMonth = Session::get('dashboard_month', now()->month);
+        $currentYear = $this->pageFilters['year'] ?? now()->year;
+        $currentMonth = $this->pageFilters['month'] ?? now()->month;
         
         // Regular user stats
         $incomeThisMonth = Movement::where('user_id', $user->id)

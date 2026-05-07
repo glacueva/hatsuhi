@@ -6,6 +6,7 @@ use BackedEnum;
 use Closure;
 use Filament\Support\Components\Component;
 use Filament\Support\Concerns\HasBadgeTooltip;
+use Filament\Support\Concerns\HasExtraAttributes;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Htmlable;
 use LogicException;
@@ -14,6 +15,7 @@ use UnitEnum;
 class NavigationItem extends Component
 {
     use HasBadgeTooltip;
+    use HasExtraAttributes;
 
     protected string | UnitEnum | Closure | null $group = null;
 
@@ -147,6 +149,10 @@ class NavigationItem extends Component
 
     public function url(string | Closure | null $url, bool | Closure | null $shouldOpenInNewTab = null): static
     {
+        // Security: If this URL is derived from user input, validate it
+        // to prevent XSS via `javascript:` protocol URLs rendered
+        // in `href` attributes.
+
         $this->url = $url;
 
         if ($shouldOpenInNewTab !== null) {
@@ -164,9 +170,11 @@ class NavigationItem extends Component
     /**
      * @return string | array<string> | null
      */
-    public function getBadgeColor(): string | array | null
+    public function getBadgeColor(?string $badge = null): string | array | null
     {
-        return $this->evaluate($this->badgeColor);
+        return $this->evaluate($this->badgeColor, [
+            'badge' => $badge,
+        ]);
     }
 
     public function getGroup(): string | UnitEnum | null

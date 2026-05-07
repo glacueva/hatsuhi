@@ -94,6 +94,68 @@ class TableSelect extends Field
             }
 
             $relationship = $component->getRelationship();
+            $relationshipName = $component->getRelationshipName();
+
+            if (
+                (! str_contains($relationshipName, '.')) &&
+                ($record = $component->getRecord()) instanceof Model &&
+                $record->relationLoaded($relationshipName)
+            ) {
+                $relatedRecords = $record->getRelationValue($relationshipName);
+
+                if (
+                    ($relationship instanceof BelongsToMany) ||
+                    ($relationship instanceof HasOneOrManyThrough)
+                ) {
+                    $component->state(
+                        $relatedRecords
+                            ->pluck(($relationship instanceof BelongsToMany) ? $relationship->getRelatedKeyName() : $relationship->getRelated()->getKeyName())
+                            ->map(static fn ($key): string => strval($key))
+                            ->all(),
+                    );
+
+                    return;
+                }
+
+                if ($relationship instanceof BelongsToThrough) {
+                    $component->state(
+                        $relatedRecords?->getAttribute(
+                            $relationship->getRelated()->getKeyName(),
+                        ),
+                    );
+
+                    return;
+                }
+
+                if ($relationship instanceof HasMany) {
+                    $component->state(
+                        $relatedRecords
+                            ->pluck($relationship->getLocalKeyName())
+                            ->all(),
+                    );
+
+                    return;
+                }
+
+                if ($relationship instanceof HasOne) {
+                    $component->state(
+                        $relatedRecords?->getAttribute(
+                            $relationship->getLocalKeyName(),
+                        ),
+                    );
+
+                    return;
+                }
+
+                /** @var BelongsTo $relationship */
+                $component->state(
+                    $relatedRecords?->getAttribute(
+                        $relationship->getOwnerKeyName(),
+                    ),
+                );
+
+                return;
+            }
 
             if (
                 ($relationship instanceof BelongsToMany) ||
@@ -103,8 +165,8 @@ class TableSelect extends Field
                 $relatedRecords = $relationship->getResults();
 
                 $component->state(
-                    // Cast the related keys to a string, otherwise JavaScript does not
-                    // know how to handle deselection.
+                    // Cast the related keys to a string, otherwise
+                    // JavaScript can't handle deselection.
                     //
                     // https://github.com/filamentphp/filament/issues/1111
                     $relatedRecords
@@ -198,9 +260,9 @@ class TableSelect extends Field
             }
 
             if (! $relationship instanceof BelongsToMany) {
-                // If the model is new and the foreign key is already filled, we don't need to fill it again.
-                // This could be a security issue if the foreign key was mutated in some way before it
-                // was saved, and we don't want to overwrite that value.
+                // Security: If the model is new and the foreign key is already
+                // filled, don't overwrite it — the key may have been set by
+                // authorization logic or event listeners before save.
                 if (
                     $record->wasRecentlyCreated &&
                     filled($record->getAttributeValue($relationship->getForeignKeyName()))

@@ -1,7 +1,23 @@
-import { Editor } from '@tiptap/core'
+import * as TipTapCore from '@tiptap/core'
+import * as TipTapPmState from '@tiptap/pm/state'
+import * as TipTapPmView from '@tiptap/pm/view'
+import * as TipTapPmModel from '@tiptap/pm/model'
 import getExtensions from './rich-editor/extensions'
-import { Selection } from '@tiptap/pm/state'
 import { BubbleMenuPlugin } from '@tiptap/extension-bubble-menu'
+
+const { Editor } = TipTapCore
+const { Selection } = TipTapPmState
+
+// Expose the bundled TipTap/ProseMirror modules so custom extensions loaded
+// via `RichContentPlugin::getTipTapJsExtensions()` can share the same
+// ProseMirror instance (required for `instanceof` checks across bundles).
+window.FilamentRichEditor = window.FilamentRichEditor || {}
+window.FilamentRichEditor.tiptap = {
+    core: TipTapCore,
+    pmState: TipTapPmState,
+    pmView: TipTapPmView,
+    pmModel: TipTapPmModel,
+}
 
 export default function richEditorFormComponent({
     acceptedFileTypes,
@@ -12,16 +28,21 @@ export default function richEditorFormComponent({
     editCustomBlockButtonIconHtml,
     extensions,
     floatingToolbars,
+    hasResizableImages,
     isDisabled,
     isLiveDebounced,
     isLiveOnBlur,
     key,
+    label,
     linkProtocols,
     liveDebounce,
     livewireId,
     maxFileSize,
     maxFileSizeValidationMessage,
     mergeTags,
+    mentions,
+    getMentionSearchResultsUsing,
+    getMentionLabelsUsing,
     noMergeTagSearchResultsMessage,
     placeholder,
     state,
@@ -52,6 +73,11 @@ export default function richEditorFormComponent({
             editor = new Editor({
                 editable: !isDisabled,
                 element: this.$refs.editor,
+                editorProps: {
+                    attributes: {
+                        ...(label ? { 'aria-label': label } : {}),
+                    },
+                },
                 extensions: await getExtensions({
                     acceptedFileTypes,
                     acceptedFileTypesValidationMessage,
@@ -71,6 +97,7 @@ export default function richEditorFormComponent({
                             { schemaComponent: key },
                         ),
                     floatingToolbars,
+                    hasResizableImages,
                     insertCustomBlockUsing: (id, dragPosition = null) =>
                         this.$wire.mountAction(
                             'customBlock',
@@ -82,6 +109,9 @@ export default function richEditorFormComponent({
                     maxFileSize,
                     maxFileSizeValidationMessage,
                     mergeTags,
+                    mentions,
+                    getMentionSearchResultsUsing,
+                    getMentionLabelsUsing,
                     noMergeTagSearchResultsMessage,
                     placeholder,
                     statePath,
@@ -168,6 +198,12 @@ export default function richEditorFormComponent({
 
                 this.editorUpdatedAt = Date.now()
                 this.editorSelection = transaction.selection.toJSON()
+            })
+
+            editor.on('transaction', () => {
+                if (isDestroyed) return
+
+                this.editorUpdatedAt = Date.now()
             })
 
             if (isLiveOnBlur) {

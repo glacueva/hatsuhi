@@ -100,7 +100,7 @@ class Component extends ViewComponent
      */
     protected function resolveDefaultClosureDependencyForEvaluationByType(string $parameterType): array
     {
-        $record = $this->getRecord();
+        $record = is_a($parameterType, Model::class, allow_string: true) ? $this->getRecord() : null;
 
         if ((! $record) || is_array($record)) {
             return match ($parameterType) {
@@ -111,9 +111,7 @@ class Component extends ViewComponent
         }
 
         return match ($parameterType) {
-            Get::class => [$this->makeGetUtility()],
             Model::class, $record::class => [$record],
-            Set::class => [$this->makeSetUtility()],
             default => parent::resolveDefaultClosureDependencyForEvaluationByType($parameterType),
         };
     }

@@ -2,10 +2,10 @@
 
 namespace Filament\Actions\Exports\Jobs;
 
-use AnourValar\EloquentSerialize\Facades\EloquentSerializeFacade;
 use Carbon\CarbonInterface;
 use Filament\Actions\Exports\Exporter;
 use Filament\Actions\Exports\Models\Export;
+use Filament\Support\EloquentSerializer\EloquentSerializer;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -63,6 +63,10 @@ class ExportCsv implements ShouldQueue
 
     public function handle(): void
     {
+        if ($this->batch()?->cancelled()) {
+            return;
+        }
+
         /** @var Authenticatable $user */
         $user = $this->export->user;
 
@@ -74,7 +78,7 @@ class ExportCsv implements ShouldQueue
         $csv = Writer::from(new SplTempFileObject);
         $csv->setDelimiter($this->exporter::getCsvDelimiter());
 
-        $query = EloquentSerializeFacade::unserialize($this->query);
+        $query = app(EloquentSerializer::class)->unserialize($this->query);
 
         foreach ($this->exporter->getCachedColumns() as $column) {
             $column->applyRelationshipAggregates($query);

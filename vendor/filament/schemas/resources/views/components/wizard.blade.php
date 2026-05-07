@@ -18,6 +18,7 @@
                 stepQueryStringKey: @js($getStepQueryStringKey()),
             })"
     x-on:next-wizard-step.window="if ($event.detail.key === @js($key)) goToNextStep()"
+    x-on:go-to-wizard-step.window="$event.detail.key === @js($key) && goToStep($event.detail.step)"
     wire:ignore.self
     {{
         $attributes
@@ -68,7 +69,6 @@
                         x-bind:aria-current="getStepIndex(step) === {{ $loop->index }} ? 'step' : null"
                         x-on:click="step = @js($step->getKey())"
                         x-bind:disabled="! isStepAccessible(@js($step->getKey())) || @js($previousAction->isDisabled())"
-                        role="step"
                         class="fi-sc-wizard-header-step-btn"
                     >
                         <div class="fi-sc-wizard-header-step-icon-ctn">

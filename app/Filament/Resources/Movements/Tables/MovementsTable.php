@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 use App\Filament\Imports\MovementImporter;
 use App\Filament\Exports\MovementExporter;
+use Filament\Tables\Columns\Summarizers\Sum;
 
 class MovementsTable
 {
@@ -33,8 +34,7 @@ class MovementsTable
                     ->sortable()
                     ->searchable(),
                 TextColumn::make('date')
-                    ->date()
-                    ->sortable(),
+                    ->date(),
                 TextColumn::make('concept')
                     ->searchable(),
                 TextColumn::make('amount')
@@ -42,7 +42,8 @@ class MovementsTable
                         $symbol = $record->user->currency->symbol ?? '$';
                         return $symbol . $record->absolute_amount;
                     })
-                    ->sortable(),
+                    ->sortable()
+                    ->summarize(Sum::make()),
                 BadgeColumn::make('compensation')
                     ->label('Compensation')
                     ->colors([ 
@@ -105,6 +106,7 @@ class MovementsTable
                     ->icon('heroicon-o-arrow-up-tray')
                     ->color('warning'),
                 
-            ]);
+            ])
+            ->defaultSort('date', 'desc');
     }
 }

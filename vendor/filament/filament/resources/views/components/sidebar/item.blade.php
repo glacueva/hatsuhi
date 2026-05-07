@@ -120,11 +120,12 @@
                     $isChildActive = (! $isChildItemChildItemsActive) && $childItem->isActive();
                     $childItemActiveIcon = $childItem->getActiveIcon();
                     $childItemBadge = $childItem->getBadge();
-                    $childItemBadgeColor = $childItem->getBadgeColor();
-                    $childItemBadgeTooltip = $childItem->getBadgeTooltip();
+                    $childItemBadgeColor = $childItem->getBadgeColor($childItemBadge);
+                    $childItemBadgeTooltip = $childItem->getBadgeTooltip($childItemBadge);
                     $childItemIcon = $childItem->getIcon();
                     $shouldChildItemOpenUrlInNewTab = $childItem->shouldOpenUrlInNewTab();
                     $childItemUrl = $childItem->getUrl();
+                    $childItemExtraAttributes = $childItem->getExtraAttributeBag();
                 @endphp
 
                 <x-filament-panels::sidebar.item
@@ -142,6 +143,7 @@
                     sub-grouped
                     :sub-navigation="$subNavigation"
                     :url="$childItemUrl"
+                    :attributes="\Filament\Support\prepare_inherited_attributes($childItemExtraAttributes)"
                 >
                     {{ $childItem->getLabel() }}
                 </x-filament-panels::sidebar.item>

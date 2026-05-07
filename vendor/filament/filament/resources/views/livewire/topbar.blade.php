@@ -174,11 +174,12 @@
                                             @php
                                                 $isItemActive = $item->isActive();
                                                 $itemBadge = $item->getBadge();
-                                                $itemBadgeColor = $item->getBadgeColor();
-                                                $itemBadgeTooltip = $item->getBadgeTooltip();
+                                                $itemBadgeColor = $item->getBadgeColor($itemBadge);
+                                                $itemBadgeTooltip = $item->getBadgeTooltip($itemBadge);
                                                 $itemUrl = $item->getUrl();
                                                 $itemIcon = $isItemActive ? ($item->getActiveIcon() ?? $item->getIcon()) : $item->getIcon();
                                                 $shouldItemOpenUrlInNewTab = $item->shouldOpenUrlInNewTab();
+                                                $itemExtraAttributes = $item->getExtraAttributeBag();
                                             @endphp
 
                                             <x-filament::dropdown.list.item
@@ -190,6 +191,7 @@
                                                 :icon="$itemIcon"
                                                 tag="a"
                                                 :target="$shouldItemOpenUrlInNewTab ? '_blank' : null"
+                                                :attributes="\Filament\Support\prepare_inherited_attributes($itemExtraAttributes)"
                                             >
                                                 {{ $item->getLabel() }}
                                             </x-filament::dropdown.list.item>
@@ -203,11 +205,12 @@
                                     $isItemActive = $item->isActive();
                                     $itemActiveIcon = $item->getActiveIcon();
                                     $itemBadge = $item->getBadge();
-                                    $itemBadgeColor = $item->getBadgeColor();
-                                    $itemBadgeTooltip = $item->getBadgeTooltip();
+                                    $itemBadgeColor = $item->getBadgeColor($itemBadge);
+                                    $itemBadgeTooltip = $item->getBadgeTooltip($itemBadge);
                                     $itemIcon = $item->getIcon();
                                     $shouldItemOpenUrlInNewTab = $item->shouldOpenUrlInNewTab();
                                     $itemUrl = $item->getUrl();
+                                    $itemExtraAttributes = $item->getExtraAttributeBag();
                                 @endphp
 
                                 <x-filament-panels::topbar.item
@@ -219,6 +222,7 @@
                                     :icon="$itemIcon"
                                     :should-open-url-in-new-tab="$shouldItemOpenUrlInNewTab"
                                     :url="$itemUrl"
+                                    :attributes="\Filament\Support\prepare_inherited_attributes($itemExtraAttributes)"
                                 >
                                     {{ $item->getLabel() }}
                                 </x-filament-panels::topbar.item>
@@ -247,7 +251,7 @@
 
             @if (filament()->auth()->check())
                 @if (filament()->hasDatabaseNotifications() && filament()->getDatabaseNotificationsPosition() === \Filament\Enums\DatabaseNotificationsPosition::Topbar)
-                    @livewire(Filament\Livewire\DatabaseNotifications::class, [
+                    @livewire(filament()->getDatabaseNotificationsLivewireComponent(), [
                         'lazy' => filament()->hasLazyLoadedDatabaseNotifications(),
                     ])
                 @endif

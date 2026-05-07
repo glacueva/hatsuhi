@@ -1,15 +1,18 @@
 @php
     $customBlocks = $getCustomBlocks();
+    $groupedCustomBlocks = $getGroupedCustomBlocks();
     $extraAttributeBag = $getExtraAttributeBag();
     $fieldWrapperView = $getFieldWrapperView();
     $id = $getId();
     $isDisabled = $isDisabled();
+    $label = $getLabel();
     $livewireKey = $getLivewireKey();
     $key = $getKey();
     $mergeTags = $getMergeTags();
     $statePath = $getStatePath();
-    $tools = $getTools();
+    $mentions = $getMentionsForJs();
     $toolbarButtons = $getToolbarButtons();
+    $tools = $getTools();
     $floatingToolbars = $getFloatingToolbars();
     $linkProtocols = $getLinkProtocols();
     $fileAttachmentsMaxSize = $getFileAttachmentsMaxSize();
@@ -18,6 +21,7 @@
 
 <x-dynamic-component :component="$fieldWrapperView" :field="$field">
     <x-filament::input.wrapper
+        :disabled="$isDisabled"
         :valid="! $errors->has($statePath)"
         x-cloak
         :attributes="
@@ -37,7 +41,23 @@
                         editCustomBlockButtonIconHtml: @js(\Filament\Support\generate_icon_html(\Filament\Support\Icons\Heroicon::PencilSquare, alias: \Filament\Forms\View\FormsIconAlias::COMPONENTS_RICH_EDITOR_PANELS_CUSTOM_BLOCK_EDIT_BUTTON)->toHtml()),
                         extensions: @js($getTipTapJsExtensions()),
                         floatingToolbars: @js($floatingToolbars),
+                        getMentionLabelsUsing: async (mentions) => {
+                            return await $wire.callSchemaComponentMethod(
+                                @js($key),
+                                'getMentionLabelsForJs',
+                                { mentions },
+                            )
+                        },
+                        getMentionSearchResultsUsing: async (query, char) => {
+                            return await $wire.callSchemaComponentMethod(
+                                @js($key),
+                                'getMentionSearchResultsForJs',
+                                { search: query, char },
+                            )
+                        },
+                        hasResizableImages: @js($hasResizableImages()),
                         isDisabled: @js($isDisabled),
+                        label: @js($label),
                         isLiveDebounced: @js($isLiveDebounced()),
                         isLiveOnBlur: @js($isLiveOnBlur()),
                         key: @js($key),
@@ -46,6 +66,7 @@
                         livewireId: @js($this->getId()),
                         maxFileSize: @js($fileAttachmentsMaxSize),
                         maxFileSizeValidationMessage: @js($fileAttachmentsMaxSize ? trans_choice('filament-forms::components.rich_editor.file_attachments_max_size_message', $fileAttachmentsMaxSize, ['max' => $fileAttachmentsMaxSize]) : null),
+                        mentions: @js($mentions),
                         mergeTags: @js($mergeTags),
                         noMergeTagSearchResultsMessage: @js($getNoMergeTagSearchResultsMessage()),
                         placeholder: @js($getPlaceholder()),
@@ -69,7 +90,11 @@
                     @foreach ($toolbarButtons as $button => $buttonGroup)
                         <div class="fi-fo-rich-editor-toolbar-group">
                             @foreach ($buttonGroup as $button)
-                                {{ $tools[$button] ?? throw new LogicException("Toolbar button [{$button}] cannot be found.") }}
+                                @if (is_string($button))
+                                    {{ $tools[$button] ?? throw new LogicException("Toolbar button [{$button}] cannot be found.") }}
+                                @else
+                                    {{ $button }}
+                                @endif
                             @endforeach
                         </div>
                     @endforeach
@@ -109,7 +134,11 @@
                             class="fi-fo-rich-editor-floating-toolbar fi-not-prose"
                         >
                             @foreach ($buttons as $button)
-                                {{ $tools[$button] }}
+                                @if (is_string($button))
+                                    {{ $tools[$button] }}
+                                @else
+                                    {{ $button }}
+                                @endif
                             @endforeach
                         </div>
                     @endforeach
@@ -144,38 +173,52 @@
                                 </div>
                             </div>
 
-                            <div class="fi-fo-rich-editor-custom-blocks-list">
-                                @foreach ($customBlocks as $block)
-                                    @php
-                                        $blockId = $block::getId();
-                                    @endphp
+                            <div class="fi-fo-rich-editor-custom-blocks-ctn">
+                                @foreach ($groupedCustomBlocks as $customBlockGroupLabel => $groupBlocks)
+                                    @if (filled($customBlockGroupLabel))
+                                        <h4
+                                            class="fi-fo-rich-editor-custom-blocks-group-header"
+                                        >
+                                            {{ $customBlockGroupLabel }}
+                                        </h4>
+                                    @endif
 
-                                    <button
-                                        draggable="true"
-                                        type="button"
-                                        x-data="{ isLoading: false }"
-                                        x-on:click="
-                                            isLoading = true
-
-                                            $wire.mountAction(
-                                                'customBlock',
-                                                { editorSelection, id: @js($blockId), mode: 'insert' },
-                                                { schemaComponent: @js($key) },
-                                            )
-                                        "
-                                        x-on:dragstart="$event.dataTransfer.setData('customBlock', @js($blockId))"
-                                        x-on:open-modal.window="isLoading = false"
-                                        x-on:run-rich-editor-commands.window="isLoading = false"
-                                        class="fi-fo-rich-editor-custom-block-btn"
+                                    <div
+                                        class="fi-fo-rich-editor-custom-blocks-list"
                                     >
-                                        {{
-                                            \Filament\Support\generate_loading_indicator_html((new \Illuminate\View\ComponentAttributeBag([
-                                                'x-show' => 'isLoading',
-                                            ])))
-                                        }}
+                                        @foreach ($groupBlocks as $block)
+                                            @php
+                                                $blockId = $block::getId();
+                                            @endphp
 
-                                        {{ $block::getLabel() }}
-                                    </button>
+                                            <button
+                                                draggable="true"
+                                                type="button"
+                                                x-data="{ isLoading: false }"
+                                                x-on:click="
+                                                    isLoading = true
+
+                                                    $wire.mountAction(
+                                                        'customBlock',
+                                                        { editorSelection, id: @js($blockId), mode: 'insert' },
+                                                        { schemaComponent: @js($key) },
+                                                    )
+                                                "
+                                                x-on:dragstart="$event.dataTransfer.setData('customBlock', @js($blockId))"
+                                                x-on:open-modal.window="isLoading = false"
+                                                x-on:run-rich-editor-commands.window="isLoading = false"
+                                                class="fi-fo-rich-editor-custom-block-btn"
+                                            >
+                                                {{
+                                                    \Filament\Support\generate_loading_indicator_html((new \Illuminate\View\ComponentAttributeBag([
+                                                        'x-show' => 'isLoading',
+                                                    ])))
+                                                }}
+
+                                                {{ $block::getLabel() }}
+                                            </button>
+                                        @endforeach
+                                    </div>
                                 @endforeach
                             </div>
                         </div>

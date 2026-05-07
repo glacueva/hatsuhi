@@ -25,7 +25,7 @@ trait HasSubNavigation
      */
     public function getSubNavigation(): array
     {
-        if (filled($cluster = static::getCluster())) {
+        if (filled($cluster = static::getCluster()) && $cluster::shouldRegisterSubNavigation()) {
             return $this->generateNavigationItems($cluster::getClusteredComponents());
         }
 
@@ -82,7 +82,7 @@ trait HasSubNavigation
                     $itemGroupKey = $itemGroup->name;
                 }
 
-                if (array_key_exists($itemGroupKey, $navigationGroups)) {
+                if (array_key_exists($itemGroupKey ?? '', $navigationGroups)) {
                     $navigationGroups[$itemGroupKey]->items([
                         ...$navigationGroups[$itemGroupKey]->getItems(),
                         $item,

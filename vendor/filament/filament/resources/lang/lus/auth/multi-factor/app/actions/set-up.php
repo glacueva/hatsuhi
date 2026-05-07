@@ -27,7 +27,7 @@ return [
                 'instruction' => 'emaw nangmahin hemi code hi enter chawp rawh:',
 
                 'messages' => [
-                    'copied' => 'Copied',
+                    'copied' => 'Lâk chhâwn ani e',
                 ],
 
             ],
@@ -53,6 +53,8 @@ return [
                 'messages' => [
 
                     'invalid' => 'Hemi code hi a diklo.',
+
+                    'rate_limited' => 'Tumna a tam lutuk. Khawngaihin nakinah tinawn leh rawh.',
 
                 ],
 

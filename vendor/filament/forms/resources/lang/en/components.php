@@ -548,6 +548,35 @@ return [
 
                         'color' => [
                             'label' => 'Color',
+
+                            'options' => [
+                                'slate' => 'Slate',
+                                'gray' => 'Gray',
+                                'zinc' => 'Zinc',
+                                'neutral' => 'Neutral',
+                                'stone' => 'Stone',
+                                'mauve' => 'Mauve',
+                                'olive' => 'Olive',
+                                'mist' => 'Mist',
+                                'taupe' => 'Taupe',
+                                'red' => 'Red',
+                                'orange' => 'Orange',
+                                'amber' => 'Amber',
+                                'yellow' => 'Yellow',
+                                'lime' => 'Lime',
+                                'green' => 'Green',
+                                'emerald' => 'Emerald',
+                                'teal' => 'Teal',
+                                'cyan' => 'Cyan',
+                                'sky' => 'Sky',
+                                'blue' => 'Blue',
+                                'indigo' => 'Indigo',
+                                'violet' => 'Violet',
+                                'purple' => 'Purple',
+                                'fuchsia' => 'Fuchsia',
+                                'pink' => 'Pink',
+                                'rose' => 'Rose',
+                            ],
                         ],
 
                         'custom_color' => [
@@ -568,6 +597,13 @@ return [
 
         'no_merge_tag_search_results_message' => 'No merge tag results.',
 
+        'mentions' => [
+            'no_options_message' => 'No options available.',
+            'no_search_results_message' => 'No results match your search.',
+            'search_prompt' => 'Start typing to search...',
+            'searching_message' => 'Searching...',
+        ],
+
         'tools' => [
             'align_center' => 'Align center',
             'align_end' => 'Align end',
@@ -583,8 +619,11 @@ return [
             'custom_blocks' => 'Blocks',
             'details' => 'Details',
             'h1' => 'Title',
-            'h2' => 'Heading',
-            'h3' => 'Subheading',
+            'h2' => 'Heading 2',
+            'h3' => 'Heading 3',
+            'h4' => 'Heading 4',
+            'h5' => 'Heading 5',
+            'h6' => 'Heading 6',
             'grid' => 'Grid',
             'grid_delete' => 'Delete grid',
             'highlight' => 'Highlight',
@@ -594,6 +633,7 @@ return [
             'link' => 'Link',
             'merge_tags' => 'Merge tags',
             'ordered_list' => 'Numbered list',
+            'paragraph' => 'Paragraph',
             'redo' => 'Redo',
             'small' => 'Small text',
             'strike' => 'Strikethrough',
@@ -692,7 +732,17 @@ return [
     ],
 
     'tags_input' => [
+
+        'actions' => [
+
+            'delete' => [
+                'label' => 'Delete',
+            ],
+
+        ],
+
         'placeholder' => 'New tag',
+
     ],
 
     'text_input' => [
