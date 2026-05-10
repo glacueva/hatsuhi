@@ -54,17 +54,17 @@ class StatsOverview extends StatsOverviewWidget
             Stat::make('Income This Month', $user->currency->symbol . number_format($incomeThisMonth, 2))
                 ->description($incomeBudget > 0 ? number_format(($incomeThisMonth / $incomeBudgetMonthly) * 100, 1) . '% of monthly budget' : 'No budget set')
                 ->descriptionIcon($incomeThisMonth >= $incomeBudgetMonthly ? 'heroicon-o-arrow-up' : 'heroicon-o-arrow-down')
-                ->color($incomeThisMonth >= $incomeBudgetMonthly ? 'success' : 'warning')
+                ->color($incomeThisMonth >= $incomeBudgetMonthly ? 'success' : 'info')
                 ->icon('heroicon-o-arrow-up-circle'),
             
             Stat::make('Expenses This Month', $user->currency->symbol . number_format($expensesThisMonth, 2))
                 ->description('Total spent this month')
-                ->color('danger')
+                ->color('info')
                 ->icon('heroicon-o-arrow-down-circle'),
             
             Stat::make('Monthly Savings', $user->currency->symbol . number_format($savingsThisMonth, 2))
                 ->description($savingsThisMonth >= 0 ? 'Positive balance' : 'Negative balance')
-                ->color($savingsThisMonth >= 0 ? 'success' : 'danger')
+                ->color($savingsThisMonth >= 0 ? 'success' : 'info')
                 ->icon($savingsThisMonth >= 0 ? 'heroicon-o-banknotes' : 'heroicon-o-exclamation-triangle'),
         ];
     }

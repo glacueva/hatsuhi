@@ -34,7 +34,7 @@ class Movement extends Model
 
     public function category()
     {
-        return $this->belongsTo(MovementCategory::class, 'movement_category_id');
+        return $this->belongsTo(MovementCategory::class, 'movement_category_id')->where('user_id', auth()->id());
     }
 
     public function movementType()
@@ -46,7 +46,7 @@ class Movement extends Model
 
     public function account()
     {
-        return $this->belongsTo(Account::class);
+        return $this->belongsTo(Account::class)->where('user_id', auth()->id());
     }
 
     public function getAbsoluteAmountAttribute(): float

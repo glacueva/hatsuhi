@@ -7,18 +7,35 @@ use Filament\Widgets\ChartWidget;
 use App\Models\Views\ExpenseMovementCategoryView;
 use Illuminate\Support\Facades\Session;
 
+use Filament\Widgets\Concerns\InteractsWithPageFilters;
+
 class ExpenseCategoryByMonthChart extends ChartWidget
 {
+
+    use InteractsWithPageFilters;
+
     protected ?string $heading = 'Expense Categories';
-    protected $listeners = ['refreshDashboard' => '$refresh'];
     protected int | string | array $columnSpan = 1;
     protected static ?int $sort = 3;
 
+    private array $pastelColors = [
+        "#FFB2D0", "#B2FFF6", "#B2FFC3", "#FFD8B1", "#FFD9B2", "#B2BFFF", 
+        "#C3B2FF", "#FFB7B2", "#D8FFD8", "#FFB2E1", "#B2D0FF", "#E4FFF0", 
+        "#FF9AA2", "#E1F7F7", "#FFB2BF", "#F3FFE3", "#B2FFD4", "#FFDAC1", 
+        "#B5EAD7", "#FFCCF9", "#B286FD", "#E2F0CB", "#FFB585", "#B2F2FF", 
+        "#FFC4C4", "#F0E4FF", "#C7CEEA", "#B2FFE5", "#FFB2F2", "#E5B2FF", 
+        "#FFE758", "#8FD9FB", "#FFF0E4", "#FFDFD3", "#B5EAD7", "#D1EAFF", 
+        "#FFB7B2", "#D5AAFF", "#FFEAB2", "#D4B2FF", "#FFC8B2", "#FF83B2", 
+        "#FCE2CE", "#E1FFB2", "#FFFBB2", "#E2F0CB", "#F8C8DC", "#80FFDB", 
+        "#BFFCC6", "#D0FFB2", "#F2FFB2", "#B2CEFE", "#B2E1FF", "#F6B2FF", 
+        "#FFFFD1", "#FEE12B", "#FFD1DC", "#FFE1E1", "#E4F0FF", "#C5A3FF"
+    ];
+
     protected function getData(): array
     {
-        $selectedYear = Session::get('dashboard_year', now()->year);
-        $selectedMonth = Session::get('dashboard_month', now()->month);
-        $selectedAccount = Session::get('dashboard_account', null);
+        $selectedYear = $this->pageFilters['year'] ?? now()->year;
+        $selectedMonth = $this->pageFilters['month'] ?? now()->month;
+        $selectedAccount = $this->pageFilters['account'] ?? null;
         
         $data = ExpenseMovementCategoryView::where('month', $selectedMonth)
             ->where('year', $selectedYear)
@@ -51,12 +68,11 @@ class ExpenseCategoryByMonthChart extends ChartWidget
 
     private function getContrastColor(int $index): string
     {
-        $maxDistinct = 60;
-        // Usamos el módulo para repetir después de 60
-        $hueStep = 360 / $maxDistinct;
-        $hue = ($index % $maxDistinct) * $hueStep;
-
-        // Retornamos el string en formato HSL
-        return "hsl($hue, 90%, 85%)";
+        if (count($this->pastelColors) < $index) {
+            return '#CCCCCC';
+        }
+        return $this->pastelColors[$index];
     }
+
+
 }

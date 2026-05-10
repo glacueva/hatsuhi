@@ -63,7 +63,7 @@ class ActualIncomeVsActualExpense extends ChartWidget
                 [
                     'label' => 'Income',
                     'data' => $budgetData,
-                    'borderColor' => 'rgb(59, 130, 246)',
+                    'borderColor' => 'lightgreen',
                     'backgroundColor' => 'rgba(59, 130, 246, 0.1)',
                     'fill' => true,
                     'tension' => 0.1,
@@ -71,7 +71,7 @@ class ActualIncomeVsActualExpense extends ChartWidget
                 [
                     'label' => 'Expense',
                     'data' => $actualData,
-                    'borderColor' => 'rgb(34, 197, 94)',
+                    'borderColor' => 'fuchsia',
                     'backgroundColor' => 'rgba(34, 197, 94, 0.1)',
                     'fill' => true,
                     'tension' => 0.1,

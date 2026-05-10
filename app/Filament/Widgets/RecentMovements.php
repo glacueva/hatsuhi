@@ -48,10 +48,9 @@ class RecentMovements extends TableWidget
                         fn($state) => $state ? Heroicon::ArrowTrendingUp : Heroicon::ArrowTrendingDown
                     )
                     ->color(fn (bool $state): string => match ($state) {
-                        true => 'info',
-                        false => 'success',
+                        true => 'success',
+                        false => 'info',
                     })
-                    ->sortable(true)
                     ->toggleable(false),
                 TextColumn::make('account.name')
                     ->label('Account')
@@ -67,9 +66,10 @@ class RecentMovements extends TableWidget
                 TextColumn::make('amount')
                     ->label('Amount')
                     ->money(fn() => auth()->user()->currency->short ?? 'USD')
-                    ->sortable(),
+                    ->sortable()
+                    ->summarize(Sum::make()),
                 TextColumn::make('shared_amount')
-                    ->label('Your Share')
+                    ->label('Share')
                     ->money(fn() => auth()->user()->currency->short ?? 'USD')
                     ->sortable()
                     ->summarize(Sum::make()),

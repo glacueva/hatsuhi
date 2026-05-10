@@ -43,8 +43,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogoHeight('auto')
             ->colors([
                 'primary' => Color::Emerald,
-                'positive' => Color::Blue,
-                'negative' => Color::Red,
+                'info' => Color::Fuchsia[950],
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')

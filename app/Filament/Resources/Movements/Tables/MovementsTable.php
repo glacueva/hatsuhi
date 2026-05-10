@@ -38,11 +38,10 @@ class MovementsTable
                         fn($state) => $state ? Heroicon::ArrowTrendingUp : Heroicon::ArrowTrendingDown
                     )
                     ->color(fn (bool $state): string => match ($state) {
-                        true => 'info',
-                        false => 'success',
+                        true => 'success',
+                        false => 'info',
                     })
-                    ->sortable(true)
-                    ->toggleable(false),
+                    ->toggleable(true),
                 TextColumn::make('account.name')
                     ->label('Account')
                     ->sortable()
@@ -60,15 +59,15 @@ class MovementsTable
                         return $symbol . $record->absolute_amount;
                     })
                     ->sortable()
-                    ->summarize(Sum::make()),
+                    ->summarize(Sum::make('amount')),
                 TextColumn::make('shared_amount')
-                    ->label('Your Share')
+                    ->label('Share')
                     ->state(function ($record) {
                         $symbol = $record->user->currency->symbol ?? '$';
                         return $symbol . $record->absolute_shared_amount;
                     })
                     ->sortable()
-                    ->summarize(Sum::make()),
+                    ->summarize(Sum::make('shared_amount')),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
