@@ -13,6 +13,10 @@ class CreateMovement extends CreateRecord
     { 
         // Compensations always comes as a negative number
         $data['amount'] = $data['compensation'] ? -abs($data['amount']) : abs($data['amount']); 
+
+        $data['share'] = $this->getSharePercentage($data['account_id'], $data['share']);
+        $data['shared_amount'] = $data['account_id'] && $data['share'] ? round($data['amount'] * ($data['share'] / 100), 2) : 0;
+        $data['shared_amount'] = abs($data['shared_amount']);
         
         return $data;
     } 
@@ -21,12 +25,32 @@ class CreateMovement extends CreateRecord
     {
         $data['amount'] = $data['compensation'] ? -abs($data['amount']) : abs($data['amount']); 
 
+        $data['share'] = $this->getSharePercentage($data['account_id'], $data['share']);
+        $data['shared_amount'] = $data['account_id'] && $data['share'] ? round($data['amount'] * ($data['share'] / 100), 2) : 0;
+        $data['shared_amount'] = abs($data['shared_amount']);
+
         return $data; 
     }
     protected function mutateFormDataBeforeFill(array $data): array 
     { 
         //always show positive amounts in form
         $data['amount'] = abs($data['amount']); 
+
+        $data['share'] = $this->getSharePercentage($data['account_id'], $data['share']);
+        $data['shared_amount'] = $data['account_id'] && $data['share'] ? round($data['amount'] * ($data['share'] / 100), 2) : 0;
+        $data['shared_amount'] = abs($data['shared_amount']);
+
         return $data; 
+    }
+
+    public function getSharePercentage(int $accountId, float $share): float
+    {
+        $account = auth()->user()->shared_accounts()->find($accountId);
+
+        if(!$account) {
+            return 100;
+        }
+        
+        return $account ? $share : $account->share;
     }
 }

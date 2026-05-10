@@ -12,6 +12,8 @@ class Account extends Model
         'name',
         'balance',
         'is_main',
+        'is_shared',
+        'share',
     ];
     public function user()
     {

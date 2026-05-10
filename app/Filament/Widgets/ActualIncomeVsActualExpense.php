@@ -23,10 +23,13 @@ class ActualIncomeVsActualExpense extends ChartWidget
     {
         $user = auth()->user();
         $currentYear = $this->pageFilters['year'] ?? now()->year;
-        
+        $selectedAccount = $this->pageFilters['account'] ?? null;
         // Get monthly budget data
         $income_actuals = IncomeMovementView::where('user_id', $user->id)
             ->where('year', $currentYear)
+            ->when($selectedAccount, function ($query) use ($selectedAccount) {
+                $query->where('account_id', $selectedAccount);
+            })
             ->select('month', 'total_amount')
             ->orderBy('month')
             ->get()
@@ -36,6 +39,9 @@ class ActualIncomeVsActualExpense extends ChartWidget
         // Get actual monthly data
         $actuals = ExpenseMovementView::where('user_id', $user->id)
             ->where('year', $currentYear)
+            ->when($selectedAccount, function ($query) use ($selectedAccount) {
+                $query->where('account_id', $selectedAccount);
+            })
             ->select('month', 'total_amount')
             ->orderBy('month')
             ->get()

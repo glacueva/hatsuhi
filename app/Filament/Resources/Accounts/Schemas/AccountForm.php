@@ -14,12 +14,22 @@ class AccountForm
             ->components([
                 TextInput::make('name')
                     ->required(),
+                Toggle::make('is_main')
+                    ->required(),
+                Toggle::make('is_shared')
+                    ->required(),
+                TextInput::make('share')
+                    ->helperText('% of shared account (if applies)')
+                    ->requiredIf('is_shared', true)
+                    ->numeric()
+                    ->default(0.0)
+                    ->maxValue(100)
+                    ->minValue(0),
                 TextInput::make('balance')
                     ->required()
                     ->numeric()
                     ->default(0.0),
-                Toggle::make('is_main')
-                    ->required(),
-            ]);
+                
+            ])->columns(1);
     }
 }

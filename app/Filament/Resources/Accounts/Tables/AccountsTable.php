@@ -21,7 +21,14 @@ class AccountsTable
                     ->numeric()
                     ->sortable(),
                 IconColumn::make('is_main')
-                    ->boolean(),
+                    ->boolean()
+                    ->sortable(),
+                IconColumn::make('is_shared')
+                    ->boolean()
+                    ->sortable(),
+                TextColumn::make('share')
+                    ->numeric()
+                    ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

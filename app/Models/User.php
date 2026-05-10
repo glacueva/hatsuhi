@@ -62,6 +62,16 @@ class User extends Authenticatable implements FilamentUser
         return $this->is_admin;
     }
 
+    public function accounts()
+    {
+        return $this->hasMany(Account::class)->orderBy('is_main', 'desc');
+    }
+
+    public function shared_accounts()
+    {
+        return $this->accounts()->where('is_shared', true);
+    }
+
     // Filament access
     public function canAccessPanel(Panel $panel): bool
     {

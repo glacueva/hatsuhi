@@ -20,17 +20,24 @@ class StatsOverview extends StatsOverviewWidget
         $user = auth()->user();
         $currentYear = $this->pageFilters['year'] ?? now()->year;
         $currentMonth = $this->pageFilters['month'] ?? now()->month;
+        $selectedAccount = $this->pageFilters['account'] ?? null;
         
         // Regular user stats
         $incomeThisMonth = Movement::where('user_id', $user->id)
             ->whereYear('date', $currentYear)
             ->whereMonth('date', $currentMonth)
+            ->when($selectedAccount, function ($query) use ($selectedAccount) {
+                $query->where('account_id', $selectedAccount);
+            })
             ->whereHas('category.movementType', fn($q) => $q->where('is_positive', true))
             ->sum('amount');
             
         $expensesThisMonth = Movement::where('user_id', $user->id)
             ->whereYear('date', $currentYear)
             ->whereMonth('date', $currentMonth)
+            ->when($selectedAccount, function ($query) use ($selectedAccount) {
+                $query->where('account_id', $selectedAccount);
+            })
             ->whereHas('category.movementType', fn($q) => $q->where('is_positive', false))
             ->sum('amount');
             

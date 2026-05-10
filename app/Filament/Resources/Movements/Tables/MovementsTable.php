@@ -23,6 +23,8 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Imports\MovementImporter;
 use App\Filament\Exports\MovementExporter;
 use Filament\Tables\Columns\Summarizers\Sum;
+use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Columns\IconColumn;
 
 class MovementsTable
 {
@@ -30,6 +32,21 @@ class MovementsTable
     {
         return $table
             ->columns([
+                IconColumn::make('positive_flow')
+                    ->label('Flow')
+                    ->icon(
+                        fn($state) => $state ? Heroicon::ArrowTrendingUp : Heroicon::ArrowTrendingDown
+                    )
+                    ->color(fn (bool $state): string => match ($state) {
+                        true => 'info',
+                        false => 'success',
+                    })
+                    ->sortable(true)
+                    ->toggleable(false),
+                TextColumn::make('account.name')
+                    ->label('Account')
+                    ->sortable()
+                    ->searchable(),
                 TextColumn::make('category.name')
                     ->sortable()
                     ->searchable(),
@@ -44,15 +61,14 @@ class MovementsTable
                     })
                     ->sortable()
                     ->summarize(Sum::make()),
-                BadgeColumn::make('compensation')
-                    ->label('Compensation')
-                    ->colors([ 
-                        'danger' => fn ($state) => $state === true, 
-                        'gray' => fn ($state) => $state === false, 
-                    ])->icons([
-                        'heroicon-o-arrow-uturn-left' => fn ($state) => $state === true,
-                        'heroicon-o-check' => fn ($state) => $state === false, 
-                    ])->formatStateUsing(fn ($state) => $state ? 'Yes' : 'No'),
+                TextColumn::make('shared_amount')
+                    ->label('Your Share')
+                    ->state(function ($record) {
+                        $symbol = $record->user->currency->symbol ?? '$';
+                        return $symbol . $record->absolute_shared_amount;
+                    })
+                    ->sortable()
+                    ->summarize(Sum::make()),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -63,6 +79,11 @@ class MovementsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
+                SelectFilter::make('account_id')
+                    ->relationship('account', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->label('Account'),
                 SelectFilter::make('movement_category_id')
                     ->relationship('category', 'name')
                     ->searchable()

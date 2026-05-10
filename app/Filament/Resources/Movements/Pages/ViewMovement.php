@@ -21,6 +21,8 @@ class ViewMovement extends ViewRecord
     { 
         //always show positive amounts in form
         $data['amount'] = abs($data['amount']); 
+        $data['shared_amount'] = abs($data['shared_amount']);
+
         return $data; 
     }
 }

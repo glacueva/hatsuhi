@@ -11,11 +11,14 @@ class Movement extends Model
     use HasFactory;
 
     protected $fillable = [
+        'account_id',
         'user_id',
         'movement_category_id',
         'date',
         'concept',
         'amount',
+        'share',
+        'shared_amount',
     ];
 
     protected $casts = [
@@ -41,13 +44,40 @@ class Movement extends Model
             'movement_category_id','movement_type_id');
     }
 
+    public function account()
+    {
+        return $this->belongsTo(Account::class);
+    }
+
     public function getAbsoluteAmountAttribute(): float
     {
         return abs($this->amount);
     }
+    public function getAbsoluteSharedAmountAttribute(): float
+    {
+        return abs($this->shared_amount);
+    }
 
 
     // accessor for compensation
+    public function getPositiveFlowAttribute(): bool
+    {
+        // Compensation because would normally be positive but is negative
+        if ($this->isCompensation() && $this->isPositive()) {
+            return false; 
+
+        // Compensation because would normally be negative but is positive
+        } elseif ($this->isCompensation() && !$this->isPositive()) {
+            return true;
+        // Not a compensation, but is positive
+        } elseif (!$this->isCompensation() && $this->isPositive()) {
+            return true;
+        }
+        // Not a compensation, but is negative
+        return false;
+    }
+
+
     public function getCompensationAttribute(): bool
     {
         return $this->isCompensation();

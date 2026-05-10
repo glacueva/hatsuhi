@@ -17,6 +17,10 @@ class MovementImporter extends Importer
     public static function getColumns(): array
     {
         return [
+            ImportColumn::make('account_name_string')
+                ->label('Account Name')
+                ->requiredMapping(),
+
             ImportColumn::make('type_name_string')
                 ->label('Type Name')
                 ->requiredMapping(),
@@ -46,6 +50,11 @@ class MovementImporter extends Importer
     public function resolveRecord(): ?Movement
     {
         $userId = $this->getImport()->user_id ?? auth()->id();
+
+        $account = Account::firstOrCreate([
+            'name' => $this->data['account_name_string'],
+            'user_id' => $userId
+        ]);
         
         $type = MovementType::firstOrCreate([
             'name' => $this->data['type_name_string'],
@@ -58,11 +67,16 @@ class MovementImporter extends Importer
             'user_id' => $userId
         ]);
 
+        $amount = $this->calculateAmount();
+
         $record = Movement::firstOrNew([
             'user_id' => $userId,
+            'account_id' => $account->id,
             'date' => $this->data['date'],
             'concept' => $this->data['concept'],
-            'amount' => $this->calculateAmount(),
+            'amount' => $amount,
+            'share' => $account->share,
+            'shared_amount' => $account->share ? round($amount * ($account->share / 100), 2) : 0,
             'movement_category_id' => $category->id,
         ]);
 

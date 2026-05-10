@@ -15,6 +15,10 @@ class MovementExporter extends Exporter
     public static function getColumns(): array
     {
         return [
+            ExportColumn::make('account_name')->label('Account')->state(
+                function (Movement $record) {
+                    return $record->account->name;
+                }),
             ExportColumn::make('type_name_string')->label('type_name')->state(
                 function (Movement $record) {
                     return $record->category->movementType->name;

@@ -85,4 +85,6 @@ class MovementResource extends Resource
         $data['amount'] = abs($data['amount']); 
         return $data; 
     }
+
+    
 }

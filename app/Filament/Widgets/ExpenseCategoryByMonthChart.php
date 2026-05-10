@@ -18,21 +18,29 @@ class ExpenseCategoryByMonthChart extends ChartWidget
     {
         $selectedYear = Session::get('dashboard_year', now()->year);
         $selectedMonth = Session::get('dashboard_month', now()->month);
+        $selectedAccount = Session::get('dashboard_account', null);
+        
         $data = ExpenseMovementCategoryView::where('month', $selectedMonth)
             ->where('year', $selectedYear)
+            ->when($selectedAccount, function ($query) use ($selectedAccount) {
+                $query->where('account_id', $selectedAccount);
+            })
             ->where('user_id', auth()->id())
-            ->pluck('total_amount', 'name')
+            ->get(['total_amount', 'name', 'category_id'])
             ->toArray();
+
+        $categoryIds = array_column($data, 'category_id');
+        $colors = array_map(fn($id, $index) => $this->getContrastColor($index), $categoryIds, array_keys($categoryIds));
 
         return [
             'datasets' => [
                 [
                     'label' => 'Expense',
-                    'data' => array_values($data), 
-                    'backgroundColor' => $this->getRandomRedColorsFromDataset( $data ),
+                    'data' => array_column($data, 'total_amount'), 
+                    'backgroundColor' => $colors,
                 ],
             ],
-            'labels' => array_keys($data),
+            'labels' => array_column($data, 'name'),
         ];
     }
 
@@ -41,13 +49,14 @@ class ExpenseCategoryByMonthChart extends ChartWidget
         return 'pie';
     }
 
-    private function getRandomRedColorsFromDataset(array $data): array
+    private function getContrastColor(int $index): string
     {
-        $colors = [];
-        foreach($data as $value) {
-            $colors[] = 'rgba(255, ' . $value%128 . ', ' . $value%256 . ')';
-        }
+        $maxDistinct = 60;
+        // Usamos el módulo para repetir después de 60
+        $hueStep = 360 / $maxDistinct;
+        $hue = ($index % $maxDistinct) * $hueStep;
 
-        return $colors;
+        // Retornamos el string en formato HSL
+        return "hsl($hue, 90%, 85%)";
     }
 }

@@ -17,6 +17,12 @@ class Dashboard extends BaseDashboard
         return [
             FilterAction::make('Filter by Date')
                     ->schema([
+                        Select::make('account')
+                            ->label('Account')
+                            ->options(auth()->user()->accounts()->pluck('name', 'id'))
+                            ->searchable()
+                            ->preload()
+                            ->placeholder('All accounts'),
                         Select::make('month')
                             ->label('Month')
                             ->options([
