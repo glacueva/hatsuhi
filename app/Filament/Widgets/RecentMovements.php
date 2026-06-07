@@ -69,7 +69,7 @@ class RecentMovements extends TableWidget
                 TextColumn::make('concept')
                     ->searchable(),
                 TextColumn::make('amount')
-                    ->money(fn($record): string => $record->currency_short)
+                    ->money(fn($record) => $record->currency_short ?? 'EUR')
                     ->sortable()
                     ->summarize(
                         Sum::make('amount')
@@ -78,7 +78,7 @@ class RecentMovements extends TableWidget
                     ),
                 TextColumn::make('shared_amount')
                     ->label('Share')
-                    ->money(fn($record): string => $record->currency_short)
+                    ->money(fn($record) => $record->currency_short ?? 'EUR')
                     ->sortable()
                     ->summarize(
                         Sum::make('shared_amount')

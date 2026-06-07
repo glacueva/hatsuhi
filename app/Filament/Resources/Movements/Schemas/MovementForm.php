@@ -15,25 +15,6 @@ class MovementForm
     {
         return $schema
             ->components([
-                Select::make('account_id')
-                    ->options(function () {
-                        return auth()->user()->accounts()->pluck('name', 'id');
-                    })
-                    ->label('Account')
-                    ->searchable()
-                    ->preload()
-                    ->required()
-                    ->default(function () {
-                        return auth()->user()->accounts()->where('is_main', true)->first()?->id;
-                    })
-                    ->live(onBlur: true)
-                    ->afterStateUpdated(function ($state, callable $set) {
-                        if ($state) {
-                            $account = auth()->user()->accounts()->find($state);
-                            $set('share', $account ? $account->share : 0);
-                            $set('shared_amount', $account && $account->share ? round(0 * ($account->share / 100), 2) : 0);
-                        }
-                    }),
                 Select::make('movement_category_id')
                     ->options(function () {
                         return MovementCategory::query()
@@ -50,11 +31,6 @@ class MovementForm
                     ->required(),
                 DatePicker::make('date')
                     ->required(),
-                TextInput::make('concept')
-                    ->required()
-                    ->maxLength(255)
-                    ->placeholder('e.g., Monthly salary, Grocery shopping')
-                    ->columnSpan(2),
                 TextInput::make('amount')
                     ->required()
                     ->numeric()
@@ -65,6 +41,11 @@ class MovementForm
                             $set('shared_amount', round($state * ($get('share') / 100), 2) );
                         }
                     }),
+                TextInput::make('concept')
+                    ->required()
+                    ->maxLength(255)
+                    ->placeholder('e.g., Monthly salary, Grocery shopping')
+                    ->columnSpan(3),
                 TextInput::make('share')
                     ->helperText('Share % (only if the account is shared)')
                     ->required()
@@ -88,6 +69,25 @@ class MovementForm
                         return $defaultAccount ? round(0 * ($defaultAccount->share / 100), 2) : 0;
                     })
                     ->numeric(),
+                Select::make('account_id')
+                    ->options(function () {
+                        return auth()->user()->accounts()->pluck('name', 'id');
+                    })
+                    ->label('Account')
+                    ->searchable()
+                    ->preload()
+                    ->required()
+                    ->default(function () {
+                        return auth()->user()->accounts()->where('is_main', true)->first()?->id;
+                    })
+                    ->live(onBlur: true)
+                    ->afterStateUpdated(function ($state, callable $set) {
+                        if ($state) {
+                            $account = auth()->user()->accounts()->find($state);
+                            $set('share', $account ? $account->share : 0);
+                            $set('shared_amount', $account && $account->share ? round(0 * ($account->share / 100), 2) : 0);
+                        }
+                    }),
                 Toggle::make('is_compensation')
                     ->label('Is it a Compensation?')
                     ->helperText('A compensation happens when a refund happens: e.g you have to refund money from a previous Income Movement and you do not want to edit that Movement. It happens also the other way round, a previous Expense is compensated for example the refund of a purchase.')
