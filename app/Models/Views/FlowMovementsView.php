@@ -11,6 +11,11 @@ class FlowMovementsView extends Model {
     public $timestamps = false;
     public $incrementing = false;
 
+    protected $casts = [
+        'positive_flow' => 'boolean',
+        'date' => 'date',
+    ];
+
     // These models should be read-only
     public function save(array $options = []) { return false; }
 

@@ -64,8 +64,8 @@ class MovementResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         $action = class_basename(request()->route()->controller);
-        
-        if (in_array($action, ['ListMovements'])) {
+
+        if (in_array($action, ['ListMovements','HandleRequests'])) {
             $query = FlowMovementsView::query();
         }else {
             $query = parent::getEloquentQuery();
