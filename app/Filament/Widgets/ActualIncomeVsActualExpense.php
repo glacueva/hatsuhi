@@ -16,6 +16,7 @@ class ActualIncomeVsActualExpense extends ChartWidget
 
     protected ?string $heading = 'Actual Income Vs Actual Expense';
     protected int | string | array $columnSpan = 1;
+    protected ?string $pollingInterval = null;
     protected static ?int $sort = 2;
 
 

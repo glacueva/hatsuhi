@@ -26,7 +26,7 @@ class MovementForm
                     ->default(function () {
                         return auth()->user()->accounts()->where('is_main', true)->first()?->id;
                     })
-                    ->live()
+                    ->live(onBlur: true)
                     ->afterStateUpdated(function ($state, callable $set) {
                         if ($state) {
                             $account = auth()->user()->accounts()->find($state);
@@ -59,7 +59,7 @@ class MovementForm
                     ->required()
                     ->numeric()
                     ->rules(['min:0.01'])
-                    ->live()
+                    ->live(onBlur: true)
                     ->afterStateUpdated(function ($state, callable $set, callable $get) {
                         if ($state) {
                             $set('shared_amount', round($state * ($get('share') / 100), 2) );
@@ -68,13 +68,18 @@ class MovementForm
                 TextInput::make('share')
                     ->helperText('Share % (only if the account is shared)')
                     ->required()
-                    ->rules(['min:0.01'])
                     ->default(function () {
                         $defaultAccount = auth()->user()->accounts()->where('is_main', true)->first();
                         return $defaultAccount ? $defaultAccount->share : 0;
                     })
                     ->numeric()
-                    ->rules(['min:0.01']),
+                    ->live(onBlur: true)
+                    ->afterStateUpdated(function ($state, callable $set) {
+                        if ($state) {
+                            $set('shared_amount', round(0 * ($state / 100), 2));
+                        }
+                    })
+                    ->rules(['between:0,100']),
                 TextInput::make('shared_amount')
                     ->helperText('Shared Amount (only if the account is shared) (read-only)')
                     ->readOnly()
@@ -83,9 +88,9 @@ class MovementForm
                         return $defaultAccount ? round(0 * ($defaultAccount->share / 100), 2) : 0;
                     })
                     ->numeric(),
-                Toggle::make('compensation')
+                Toggle::make('is_compensation')
                     ->label('Is it a Compensation?')
-                    ->helperText('A compensation happens when a return happens: e.g you have to return money from a previous Income Movement and you do not want to edit that Movement. It happens also the other way round, a previous Expense is compensated for example the return of a purchase.')
+                    ->helperText('A compensation happens when a refund happens: e.g you have to refund money from a previous Income Movement and you do not want to edit that Movement. It happens also the other way round, a previous Expense is compensated for example the refund of a purchase.')
                     ->default(false)
                     ->required()
                     ->columnSpan(3),

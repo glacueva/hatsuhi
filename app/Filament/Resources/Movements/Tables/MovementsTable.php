@@ -50,24 +50,27 @@ class MovementsTable
                     ->sortable()
                     ->searchable(),
                 TextColumn::make('date')
+                    ->sortable()
                     ->date(),
                 TextColumn::make('concept')
                     ->searchable(),
                 TextColumn::make('amount')
-                    ->state(function ($record) {
-                        $symbol = $record->user->currency->symbol ?? '$';
-                        return $symbol . $record->absolute_amount;
-                    })
+                    ->money(fn($record): string => $record->currency_short)
                     ->sortable()
-                    ->summarize(Sum::make('amount')),
+                    ->summarize(
+                        Sum::make('amount')
+                            ->hiddenLabel()
+                            ->money(auth()->user()->currency->short)
+                    ),
                 TextColumn::make('shared_amount')
                     ->label('Share')
-                    ->state(function ($record) {
-                        $symbol = $record->user->currency->symbol ?? '$';
-                        return $symbol . $record->absolute_shared_amount;
-                    })
+                    ->money(fn($record): string => $record->currency_short)
                     ->sortable()
-                    ->summarize(Sum::make('shared_amount')),
+                    ->summarize(
+                        Sum::make('shared_amount')
+                            ->hiddenLabel()
+                            ->money(auth()->user()->currency->short)
+                    ),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -105,9 +108,9 @@ class MovementsTable
 
             ])
             ->recordActions([
-                ViewAction::make(),
-                EditAction::make(),
-                DeleteAction::make(),
+                ViewAction::make()->iconButton(),
+                EditAction::make()->iconButton(),
+                DeleteAction::make()->iconButton(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

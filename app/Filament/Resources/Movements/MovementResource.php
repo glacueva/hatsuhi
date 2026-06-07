@@ -10,6 +10,7 @@ use App\Filament\Resources\Movements\Schemas\MovementForm;
 use App\Filament\Resources\Movements\Schemas\MovementInfolist;
 use App\Filament\Resources\Movements\Tables\MovementsTable;
 use App\Models\Movement;
+use App\Models\Views\FlowMovementsView;
 use UnitEnum;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -62,27 +63,27 @@ class MovementResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        $query = parent::getEloquentQuery();
+        $action = class_basename(request()->route()->controller);
+        
+        if (in_array($action, ['ListMovements'])) {
+            $query = FlowMovementsView::query();
+        }else {
+            $query = parent::getEloquentQuery();
+        }
         
         return $query->where('user_id', auth()->id());
     }
 
-    protected function mutateFormDataBeforeCreate(array $data): array 
-    { 
-        // Compensations always comes as a negative number
-        $data['amount'] = $data['compensation'] ? -abs($data['amount']) : abs($data['amount']); 
-    } 
-
-    protected function mutateFormDataBeforeSave(array $data): array 
+    public static function compensateMovement(array $data): array
     {
-        $data['amount'] = $data['compensation'] ? -abs($data['amount']) : abs($data['amount']); 
+        // Get absolute value of amount first
 
-        return $data; 
-    }
-    protected function mutateFormDataBeforeFill(array $data): array 
-    { 
-        //always show positive amounts in form
-        $data['amount'] = abs($data['amount']); 
+        // Get validated share percentage from account
+        $data['share'] = auth()->user()->getSharePercentage($data['account_id'], $data['share']) ?? 100;
+        
+        // Calculate shared_amount based on the absolute amount first
+        $data['shared_amount'] = round($data['amount'] * ($data['share'] / 100), 2);
+        
         return $data; 
     }
 

@@ -16,6 +16,7 @@ class ExpenseBudgetVsActualExpense extends ChartWidget
 
     protected ?string $heading = 'Expense Budget Vs Actual Expense';
     protected int | string | array $columnSpan = 1;
+    protected ?string $pollingInterval = null;
     protected static ?int $sort = 2;
 
 

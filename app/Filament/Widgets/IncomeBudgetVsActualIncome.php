@@ -16,6 +16,7 @@ class IncomeBudgetVsActualIncome extends ChartWidget
 
     protected ?string $heading = 'Income Budget Vs Actual Income';
     protected int | string | array $columnSpan = 1;
+    protected ?string $pollingInterval = null;
     protected static ?int $sort = 2;
 
 

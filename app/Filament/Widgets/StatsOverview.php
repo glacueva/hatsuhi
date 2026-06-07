@@ -5,7 +5,8 @@ namespace App\Filament\Widgets;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
-use App\Models\Movement;
+use App\Models\Views\IncomeMovementView;
+use App\Models\Views\ExpenseMovementView;
 use App\Models\Expectation;
 
 class StatsOverview extends StatsOverviewWidget
@@ -13,6 +14,7 @@ class StatsOverview extends StatsOverviewWidget
     use InteractsWithPageFilters;
 
     protected int | string | array $columnSpan = 2;
+    protected ?string $pollingInterval = null;
     protected static ?int $sort = 1;
 
     protected function getStats(): array
@@ -23,23 +25,22 @@ class StatsOverview extends StatsOverviewWidget
         $selectedAccount = $this->pageFilters['account'] ?? null;
         
         // Regular user stats
-        $incomeThisMonth = Movement::where('user_id', $user->id)
-            ->whereYear('date', $currentYear)
-            ->whereMonth('date', $currentMonth)
+        // TODO: Refactor to use the new views instead of raw queries
+        $incomeThisMonth = IncomeMovementView::where('user_id', $user->id)
+            ->where('year', $currentYear)
+            ->where('month', $currentMonth)
             ->when($selectedAccount, function ($query) use ($selectedAccount) {
                 $query->where('account_id', $selectedAccount);
             })
-            ->whereHas('category.movementType', fn($q) => $q->where('is_positive', true))
-            ->sum('amount');
+            ->sum('total_amount');
             
-        $expensesThisMonth = Movement::where('user_id', $user->id)
-            ->whereYear('date', $currentYear)
-            ->whereMonth('date', $currentMonth)
+        $expensesThisMonth = ExpenseMovementView::where('user_id', $user->id)
+            ->where('year', $currentYear)
+            ->where('month', $currentMonth)
             ->when($selectedAccount, function ($query) use ($selectedAccount) {
                 $query->where('account_id', $selectedAccount);
             })
-            ->whereHas('category.movementType', fn($q) => $q->where('is_positive', false))
-            ->sum('amount');
+            ->sum('total_amount');
             
         $savingsThisMonth = $incomeThisMonth - $expensesThisMonth;
         

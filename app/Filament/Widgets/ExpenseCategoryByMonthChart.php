@@ -16,6 +16,7 @@ class ExpenseCategoryByMonthChart extends ChartWidget
 
     protected ?string $heading = 'Expense Categories';
     protected int | string | array $columnSpan = 1;
+    protected ?string $pollingInterval = null;
     protected static ?int $sort = 3;
 
     private array $pastelColors = [
@@ -43,8 +44,11 @@ class ExpenseCategoryByMonthChart extends ChartWidget
                 $query->where('account_id', $selectedAccount);
             })
             ->where('user_id', auth()->id())
-            ->get(['total_amount', 'name', 'category_id'])
+            ->groupBy('category_id','name')
+            ->selectRaw('sum(total_amount) as total_amount, name, category_id')
+            ->get()
             ->toArray();
+        
 
         $categoryIds = array_column($data, 'category_id');
         $colors = array_map(fn($id, $index) => $this->getContrastColor($index), $categoryIds, array_keys($categoryIds));

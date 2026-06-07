@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Movements\Schemas;
 
 use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\IconEntry;
 use Filament\Schemas\Schema;
 
 class MovementInfolist
@@ -18,13 +19,15 @@ class MovementInfolist
                 TextEntry::make('date')
                     ->date(),
                 TextEntry::make('concept'),
-                TextEntry::make('absolute_amount')
+                TextEntry::make('amount')
                     ->numeric(),
                 TextEntry::make('share')
                     ->numeric(),
-                TextEntry::make('absolute_shared_amount')
+                TextEntry::make('shared_amount')
                     ->numeric(),
-                TextEntry::make('is_compensation'),
+                IconEntry::make('is_compensation')
+                    ->boolean()
+                    ->label('Compensation'),
                 TextEntry::make('created_at')
                     ->dateTime()
                     ->placeholder('-')

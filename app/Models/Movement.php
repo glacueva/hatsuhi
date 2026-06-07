@@ -19,11 +19,14 @@ class Movement extends Model
         'amount',
         'share',
         'shared_amount',
+        'is_compensation',
     ];
 
     protected $casts = [
         'date' => 'date',
         'amount' => 'decimal:2',
+        'shared_amount' => 'decimal:2',
+        'is_compensation' => 'boolean',
     ];
 
     // Relationships
@@ -47,52 +50,6 @@ class Movement extends Model
     public function account()
     {
         return $this->belongsTo(Account::class)->where('user_id', auth()->id());
-    }
-
-    public function getAbsoluteAmountAttribute(): float
-    {
-        return abs($this->amount);
-    }
-    public function getAbsoluteSharedAmountAttribute(): float
-    {
-        return abs($this->shared_amount);
-    }
-
-
-    // accessor for compensation
-    public function getPositiveFlowAttribute(): bool
-    {
-        // Compensation because would normally be positive but is negative
-        if ($this->isCompensation() && $this->isPositive()) {
-            return false; 
-
-        // Compensation because would normally be negative but is positive
-        } elseif ($this->isCompensation() && !$this->isPositive()) {
-            return true;
-        // Not a compensation, but is positive
-        } elseif (!$this->isCompensation() && $this->isPositive()) {
-            return true;
-        }
-        // Not a compensation, but is negative
-        return false;
-    }
-
-
-    public function getCompensationAttribute(): bool
-    {
-        return $this->isCompensation();
-    }
-
-    // accessor for compensation
-    public function getIsCompensationAttribute(): string
-    {
-        return $this->isCompensation() ? 'Yes' : 'No';
-    }
-
-     // Helper method to check if movement is a compensation
-    public function isCompensation(): bool
-    {
-        return $this->amount < 0;
     }
 
     // Helper method to check if movement is positive

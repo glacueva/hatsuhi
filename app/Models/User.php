@@ -89,4 +89,16 @@ class User extends Authenticatable implements FilamentUser
     {
         return $query->where('is_admin', false);
     }
+
+    public function getSharePercentage(int $accountId, float $share): float
+    {
+        $account = $this->shared_accounts()->find($accountId);
+
+        if (!$account) {
+            return 100;
+        }
+
+        // Ensure share is between 0 and 100
+        return max(0, min(100, $share));
+    }
 }
