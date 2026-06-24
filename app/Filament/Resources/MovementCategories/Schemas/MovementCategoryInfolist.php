@@ -19,7 +19,7 @@ class MovementCategoryInfolist
                     ->placeholder('-'),
                 TextEntry::make('updated_at')
                     ->dateTime()
-                    ->placeholder('-')
+                    ->placeholder('-'),
             ]);
     }
 }

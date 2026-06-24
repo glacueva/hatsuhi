@@ -24,7 +24,7 @@ class UserForm
                     ->password()
                     ->required(),
                 Select::make('currency_id')
-                    ->relationship('currency','name'),
+                    ->relationship('currency', 'name'),
                 Toggle::make('is_admin')
                     ->required(),
             ]);

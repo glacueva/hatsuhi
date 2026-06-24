@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             // Each user is their own tenant in this architecture
-            $table->foreignId('currency_id')->nullable()->constrained(); 
+            $table->foreignId('currency_id')->nullable()->constrained();
             $table->boolean('is_admin')->default(false);
         });
     }

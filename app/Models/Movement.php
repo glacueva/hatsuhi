@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
 
 class Movement extends Model
 {
@@ -43,8 +42,8 @@ class Movement extends Model
     public function movementType()
     {
         return $this->hasOneThrough(MovementType::class, MovementCategory::class,
-            'id','id',
-            'movement_category_id','movement_type_id');
+            'id', 'id',
+            'movement_category_id', 'movement_type_id');
     }
 
     public function account()
@@ -81,19 +80,22 @@ class Movement extends Model
     public function scopeForMonth($query, $year, $month)
     {
         return $query->whereYear('date', $year)
-                    ->whereMonth('date', $month);
+            ->whereMonth('date', $month);
     }
 
     public function scopeRecent($query, $limit = 10)
     {
         return $query->orderBy('date', 'desc')
-                    ->orderBy('created_at', 'desc')
-                    ->limit($limit);
+            ->orderBy('created_at', 'desc')
+            ->limit($limit);
     }
 
-    protected static function booted() { 
-        static::creating(function ($post) { 
-            if (auth()->check()) { $post->user_id = auth()->id(); } 
-        }); 
+    protected static function booted()
+    {
+        static::creating(function ($post) {
+            if (auth()->check()) {
+                $post->user_id = auth()->id();
+            }
+        });
     }
 }

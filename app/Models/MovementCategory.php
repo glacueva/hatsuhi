@@ -55,12 +55,16 @@ class MovementCategory extends Model
     public function getFullNameAttribute()
     {
         $type = $this->movementType->name ?? 'Unknown';
+
         return "{$type} - {$this->name}";
     }
 
-    protected static function booted() { 
-        static::creating(function ($post) { 
-            if (auth()->check()) { $post->user_id = auth()->id(); } 
-        }); 
+    protected static function booted()
+    {
+        static::creating(function ($post) {
+            if (auth()->check()) {
+                $post->user_id = auth()->id();
+            }
+        });
     }
 }

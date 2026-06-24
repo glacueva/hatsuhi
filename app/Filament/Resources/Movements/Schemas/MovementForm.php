@@ -2,12 +2,12 @@
 
 namespace App\Filament\Resources\Movements\Schemas;
 
+use App\Models\MovementCategory;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
-use App\Models\MovementCategory;
 
 class MovementForm
 {
@@ -21,7 +21,7 @@ class MovementForm
                             ->where('user_id', auth()->id())
                             ->with('movementType')
                             ->get()
-                            ->groupBy(fn ($record) => $record->movementType->name) 
+                            ->groupBy(fn ($record) => $record->movementType->name)
                             ->map(fn ($group) => $group->pluck('name', 'id'))
                             ->toArray();
                     })
@@ -38,7 +38,7 @@ class MovementForm
                     ->live(onBlur: true)
                     ->afterStateUpdated(function ($state, callable $set, callable $get) {
                         if ($state) {
-                            $set('shared_amount', round($state * ($get('share') / 100), 2) );
+                            $set('shared_amount', round($state * ($get('share') / 100), 2));
                         }
                     }),
                 TextInput::make('concept')
@@ -51,6 +51,7 @@ class MovementForm
                     ->required()
                     ->default(function () {
                         $defaultAccount = auth()->user()->accounts()->where('is_main', true)->first();
+
                         return $defaultAccount ? $defaultAccount->share : 0;
                     })
                     ->numeric()
@@ -66,6 +67,7 @@ class MovementForm
                     ->readOnly()
                     ->default(function () {
                         $defaultAccount = auth()->user()->accounts()->where('is_main', true)->first();
+
                         return $defaultAccount ? round(0 * ($defaultAccount->share / 100), 2) : 0;
                     })
                     ->numeric(),

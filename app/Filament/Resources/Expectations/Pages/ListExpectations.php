@@ -3,13 +3,12 @@
 namespace App\Filament\Resources\Expectations\Pages;
 
 use App\Filament\Resources\Expectations\ExpectationResource;
-use Filament\Actions\CreateAction;
+use App\Models\Expectation;
 use Filament\Actions\Action;
-use Filament\Resources\Pages\ListRecords;
+use Filament\Actions\CreateAction;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use App\Models\Expectation;
-
+use Filament\Resources\Pages\ListRecords;
 
 class ListExpectations extends ListRecords
 {
@@ -24,7 +23,7 @@ class ListExpectations extends ListRecords
                 ->form([
                     Select::make('from_year')
                         ->label('Source Year')
-                        ->options(fn() => Expectation::distinct()->pluck('year', 'year'))
+                        ->options(fn () => Expectation::distinct()->pluck('year', 'year'))
                         ->required(),
                     TextInput::make('to_year')
                         ->label('Destination Year')
@@ -44,7 +43,7 @@ class ListExpectations extends ListRecords
                     }
                 })
                 ->successNotificationTitle('Year duplicated successfully!'),
-                
+
             CreateAction::make(),
         ];
     }

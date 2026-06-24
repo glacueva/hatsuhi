@@ -11,14 +11,11 @@ use App\Filament\Resources\Movements\Schemas\MovementInfolist;
 use App\Filament\Resources\Movements\Tables\MovementsTable;
 use App\Models\Movement;
 use App\Models\Views\FlowMovementsView;
-use UnitEnum;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
-
-
 use Illuminate\Database\Eloquent\Builder;
 
 class MovementResource extends Resource
@@ -65,12 +62,12 @@ class MovementResource extends Resource
     {
         $action = class_basename(request()->route()->controller);
 
-        if (in_array($action, ['ListMovements','HandleRequests'])) {
+        if (in_array($action, ['ListMovements', 'HandleRequests'])) {
             $query = FlowMovementsView::query();
-        }else {
+        } else {
             $query = parent::getEloquentQuery();
         }
-        
+
         return $query->where('user_id', auth()->id());
     }
 
@@ -80,12 +77,10 @@ class MovementResource extends Resource
 
         // Get validated share percentage from account
         $data['share'] = auth()->user()->getSharePercentage($data['account_id'], $data['share']) ?? 100;
-        
+
         // Calculate shared_amount based on the absolute amount first
         $data['shared_amount'] = round($data['amount'] * ($data['share'] / 100), 2);
-        
-        return $data; 
-    }
 
-    
+        return $data;
+    }
 }

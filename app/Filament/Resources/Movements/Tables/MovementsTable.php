@@ -2,29 +2,24 @@
 
 namespace App\Filament\Resources\Movements\Tables;
 
+use App\Filament\Exports\MovementExporter;
+use App\Filament\Imports\MovementImporter;
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Actions\ViewAction;
-use Filament\Actions\DeleteAction;
-use Filament\Actions\CreateAction;
-use Filament\Actions\ImportAction;
 use Filament\Actions\ExportBulkAction;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\BadgeColumn;
-use Filament\Tables\Table;
-use Filament\Tables\Filters\SelectFilter;
-use Filament\Tables\Filters\Filter;
-
+use Filament\Actions\ImportAction;
+use Filament\Actions\ViewAction;
 use Filament\Forms\Components\DatePicker;
-
-use Illuminate\Database\Eloquent\Builder;
-
-use App\Filament\Imports\MovementImporter;
-use App\Filament\Exports\MovementExporter;
-use Filament\Tables\Columns\Summarizers\Sum;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\Summarizers\Sum;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class MovementsTable
 {
@@ -35,7 +30,7 @@ class MovementsTable
                 IconColumn::make('positive_flow')
                     ->label('Flow')
                     ->icon(
-                        fn($state) => $state ? Heroicon::ArrowTrendingUp : Heroicon::ArrowTrendingDown
+                        fn ($state) => $state ? Heroicon::ArrowTrendingUp : Heroicon::ArrowTrendingDown
                     )
                     ->color(fn (bool $state): string => match ($state) {
                         true => 'success',
@@ -55,7 +50,7 @@ class MovementsTable
                 TextColumn::make('concept')
                     ->searchable(),
                 TextColumn::make('amount')
-                    ->money(fn($record) => $record?->currency_short ?? 'EUR')
+                    ->money(fn ($record) => $record?->currency_short ?? 'EUR')
                     ->sortable()
                     ->summarize(
                         Sum::make('amount')
@@ -64,7 +59,7 @@ class MovementsTable
                     ),
                 TextColumn::make('shared_amount')
                     ->label('Share')
-                    ->money(fn($record) => $record?->currency_short ?? 'EUR')
+                    ->money(fn ($record) => $record?->currency_short ?? 'EUR')
                     ->sortable()
                     ->summarize(
                         Sum::make('shared_amount')
@@ -104,7 +99,7 @@ class MovementsTable
                             ->when($data['date_until'],
                                 fn (Builder $query, $date): Builder => $query->whereDate('date', '<=', $date),
                             );
-                    })
+                    }),
 
             ])
             ->recordActions([
@@ -116,10 +111,10 @@ class MovementsTable
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                     ExportBulkAction::make()
-                    ->exporter(MovementExporter::class) // La clase que creamos antes
-                    ->label('Export CSV')
-                    ->icon('heroicon-o-arrow-down-circle')
-                    ->color('info')
+                        ->exporter(MovementExporter::class) // La clase que creamos antes
+                        ->label('Export CSV')
+                        ->icon('heroicon-o-arrow-down-circle')
+                        ->color('info'),
                 ]),
             ])
             ->headerActions([
@@ -128,7 +123,7 @@ class MovementsTable
                     ->label('Import CSV')
                     ->icon('heroicon-o-arrow-up-tray')
                     ->color('warning'),
-                
+
             ])
             ->defaultSort('date', 'desc');
     }

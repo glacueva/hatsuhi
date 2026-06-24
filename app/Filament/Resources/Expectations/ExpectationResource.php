@@ -10,21 +10,22 @@ use App\Filament\Resources\Expectations\Schemas\ExpectationForm;
 use App\Filament\Resources\Expectations\Schemas\ExpectationInfolist;
 use App\Filament\Resources\Expectations\Tables\ExpectationsTable;
 use App\Models\Expectation;
-use UnitEnum;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
-
 use Illuminate\Database\Eloquent\Builder;
+use UnitEnum;
 
 class ExpectationResource extends Resource
 {
     protected static ?string $model = Expectation::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+
     protected static UnitEnum|string|null $navigationGroup = 'Dash Settings';
+
     protected static ?int $sort = 2;
 
     public static function form(Schema $schema): Schema
@@ -62,7 +63,7 @@ class ExpectationResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         $query = parent::getEloquentQuery();
-        
+
         return $query->where('user_id', auth()->id());
     }
 }

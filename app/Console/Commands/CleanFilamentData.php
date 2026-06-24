@@ -33,30 +33,31 @@ class CleanFilamentData extends Command
         if ($this->option('dry-run')) {
             $this->info('DRY RUN MODE - No files or records will be deleted');
             $this->newLine();
-            
+
             // Add dry run logic here if needed
             $this->dispatchJob(true);
         } else {
-            if (!$this->option('force') && !$this->confirm('This will permanently delete files and records older than 1 week. Continue?')) {
+            if (! $this->option('force') && ! $this->confirm('This will permanently delete files and records older than 1 week. Continue?')) {
                 $this->info('Cleanup cancelled.');
+
                 return;
             }
-            
+
             $this->dispatchJob(false);
         }
     }
-    
+
     protected function dispatchJob(bool $dryRun): void
     {
         $this->info('Dispatching Filament cleanup job...');
-        
+
         // In Laravel 12, you can dispatch with parameters
         CleanupOldSystemData::dispatch($dryRun, $this->option('days'));
-        
+
         $this->info('Cleanup job dispatched successfully!');
         $this->info('Check your logs for details.');
-        
-        if (!$dryRun) {
+
+        if (! $dryRun) {
             $this->info('The job will run in the background.');
             Sleep::for(1)->second();
             $this->call('queue:work', ['--once' => true, '--stop-when-empty' => true]);

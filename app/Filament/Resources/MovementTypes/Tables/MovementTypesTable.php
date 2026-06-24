@@ -3,14 +3,13 @@
 namespace App\Filament\Resources\MovementTypes\Tables;
 
 use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
 use Filament\Actions\DeleteAction;
+use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Table;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Table;
 
 class MovementTypesTable
 {
@@ -62,11 +61,11 @@ class MovementTypesTable
                         if ($record->categories()->count() > 0) {
                             throw new \Exception('Cannot delete movement type with existing categories.');
                         }
-                    })
+                    }),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    
+
                 ]),
             ]);
     }

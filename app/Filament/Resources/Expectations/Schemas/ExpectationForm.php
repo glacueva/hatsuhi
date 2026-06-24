@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources\Expectations\Schemas;
 
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
 class ExpectationForm
@@ -34,10 +34,12 @@ class ExpectationForm
                     ->numeric()
                     ->prefix(function ($get) {
                         $symbol = auth()->user()->currency->symbol ?? '$';
+
                         return $symbol;
                     })
                     ->suffix(function ($get) {
                         $amount = $get('amount');
+
                         return $amount ? '/year' : '';
                     })
                     ->rules(['min:0.01']),
@@ -46,8 +48,9 @@ class ExpectationForm
                     ->content(function ($get) {
                         $amount = $get('amount');
                         $symbol = auth()->user()->currency->symbol ?? '$';
-                        return $amount ? $symbol . number_format($amount / 12, 2) . '/month' : 'N/A';
-                        })
+
+                        return $amount ? $symbol.number_format($amount / 12, 2).'/month' : 'N/A';
+                    }),
             ])
             ->columns(2);
     }

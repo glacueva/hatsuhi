@@ -2,13 +2,16 @@
 
 namespace App\Models\Views;
 
-use Illuminate\Database\Eloquent\Model;
-use App\Models\MovementCategory;
 use App\Models\Account;
+use App\Models\MovementCategory;
+use Illuminate\Database\Eloquent\Model;
 
-class FlowMovementsView extends Model {
+class FlowMovementsView extends Model
+{
     protected $table = 'flow_movements_by_month_year';
+
     public $timestamps = false;
+
     public $incrementing = false;
 
     protected $casts = [
@@ -17,7 +20,10 @@ class FlowMovementsView extends Model {
     ];
 
     // These models should be read-only
-    public function save(array $options = []) { return false; }
+    public function save(array $options = [])
+    {
+        return false;
+    }
 
     public function category()
     {

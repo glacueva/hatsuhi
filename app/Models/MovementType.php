@@ -47,9 +47,12 @@ class MovementType extends Model
         return $this->is_positive ? 'Income' : 'Expense';
     }
 
-    protected static function booted() { 
-        static::creating(function ($post) { 
-            if (auth()->check()) { $post->user_id = auth()->id(); } 
-        }); 
+    protected static function booted()
+    {
+        static::creating(function ($post) {
+            if (auth()->check()) {
+                $post->user_id = auth()->id();
+            }
+        });
     }
 }

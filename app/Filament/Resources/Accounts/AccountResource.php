@@ -9,21 +9,21 @@ use App\Filament\Resources\Accounts\Schemas\AccountForm;
 use App\Filament\Resources\Accounts\Tables\AccountsTable;
 use App\Models\Account;
 use BackedEnum;
-use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
-
-
 use Illuminate\Database\Eloquent\Builder;
+use UnitEnum;
 
 class AccountResource extends Resource
 {
     protected static ?string $model = Account::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+
     protected static UnitEnum|string|null $navigationGroup = 'Settings';
+
     protected static ?int $sort = 1;
 
     public static function form(Schema $schema): Schema
@@ -55,7 +55,7 @@ class AccountResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         $query = parent::getEloquentQuery();
-        
+
         return $query->where('user_id', auth()->id());
     }
 }

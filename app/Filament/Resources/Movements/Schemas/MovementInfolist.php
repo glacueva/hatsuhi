@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\Movements\Schemas;
 
-use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\IconEntry;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 
 class MovementInfolist
@@ -30,7 +30,7 @@ class MovementInfolist
                     ->label('Compensation'),
                 TextEntry::make('created_at')
                     ->dateTime()
-                    ->placeholder('-')
+                    ->placeholder('-'),
             ]);
     }
 }

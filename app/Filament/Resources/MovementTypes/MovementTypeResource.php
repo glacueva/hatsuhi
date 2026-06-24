@@ -10,20 +10,22 @@ use App\Filament\Resources\MovementTypes\Schemas\MovementTypeForm;
 use App\Filament\Resources\MovementTypes\Schemas\MovementTypeInfolist;
 use App\Filament\Resources\MovementTypes\Tables\MovementTypesTable;
 use App\Models\MovementType;
-use UnitEnum;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use UnitEnum;
 
 class MovementTypeResource extends Resource
 {
     protected static ?string $model = MovementType::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+
     protected static UnitEnum|string|null $navigationGroup = 'Settings';
+
     protected static ?int $sort = 1;
 
     protected static ?string $recordTitleAttribute = 'name';
@@ -63,7 +65,7 @@ class MovementTypeResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         $query = parent::getEloquentQuery();
-        
+
         return $query->where('user_id', auth()->id());
     }
 }

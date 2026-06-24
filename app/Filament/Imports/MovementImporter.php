@@ -3,8 +3,8 @@
 namespace App\Filament\Imports;
 
 use App\Models\Movement;
-use App\Models\MovementType;
 use App\Models\MovementCategory;
+use App\Models\MovementType;
 use Filament\Actions\Imports\ImportColumn;
 use Filament\Actions\Imports\Importer;
 use Filament\Actions\Imports\Models\Import;
@@ -53,18 +53,18 @@ class MovementImporter extends Importer
 
         $account = Account::firstOrCreate([
             'name' => $this->data['account_name_string'],
-            'user_id' => $userId
+            'user_id' => $userId,
         ]);
-        
+
         $type = MovementType::firstOrCreate([
             'name' => $this->data['type_name_string'],
-            'user_id' => $userId
+            'user_id' => $userId,
         ]);
 
         $category = MovementCategory::firstOrCreate([
             'name' => $this->data['category_name_string'],
             'movement_type_id' => $type->id,
-            'user_id' => $userId
+            'user_id' => $userId,
         ]);
 
         $amount = $this->calculateAmount();
@@ -93,10 +93,10 @@ class MovementImporter extends Importer
 
     public static function getCompletedNotificationBody(Import $import): string
     {
-        $body = 'Your movements list import has completed and ' . Number::format($import->successful_rows) . ' ' . str('row')->plural($import->successful_rows) . ' imported.';
+        $body = 'Your movements list import has completed and '.Number::format($import->successful_rows).' '.str('row')->plural($import->successful_rows).' imported.';
 
         if ($failedRowsCount = $import->getFailedRowsCount()) {
-            $body .= ' ' . Number::format($failedRowsCount) . ' ' . str('row')->plural($failedRowsCount) . ' failed to import.';
+            $body .= ' '.Number::format($failedRowsCount).' '.str('row')->plural($failedRowsCount).' failed to import.';
         }
 
         return $body;

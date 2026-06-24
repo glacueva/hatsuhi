@@ -2,19 +2,21 @@
 
 namespace App\Filament\Widgets;
 
+use App\Models\Expectation;
+use App\Models\Views\ExpenseMovementView;
+use App\Models\Views\IncomeMovementView;
+use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
-use Filament\Widgets\Concerns\InteractsWithPageFilters;
-use App\Models\Views\IncomeMovementView;
-use App\Models\Views\ExpenseMovementView;
-use App\Models\Expectation;
 
 class StatsOverview extends StatsOverviewWidget
 {
     use InteractsWithPageFilters;
 
-    protected int | string | array $columnSpan = 2;
+    protected int|string|array $columnSpan = 2;
+
     protected ?string $pollingInterval = null;
+
     protected static ?int $sort = 1;
 
     protected function getStats(): array
@@ -23,7 +25,7 @@ class StatsOverview extends StatsOverviewWidget
         $currentYear = $this->pageFilters['year'] ?? now()->year;
         $currentMonth = $this->pageFilters['month'] ?? now()->month;
         $selectedAccount = $this->pageFilters['account'] ?? null;
-        
+
         // Regular user stats
         // TODO: Refactor to use the new views instead of raw queries
         $incomeThisMonth = IncomeMovementView::where('user_id', $user->id)
@@ -33,7 +35,7 @@ class StatsOverview extends StatsOverviewWidget
                 $query->where('account_id', $selectedAccount);
             })
             ->sum('total_amount');
-            
+
         $expensesThisMonth = ExpenseMovementView::where('user_id', $user->id)
             ->where('year', $currentYear)
             ->where('month', $currentMonth)
@@ -41,29 +43,29 @@ class StatsOverview extends StatsOverviewWidget
                 $query->where('account_id', $selectedAccount);
             })
             ->sum('total_amount');
-            
+
         $savingsThisMonth = $incomeThisMonth - $expensesThisMonth;
-        
+
         $incomeBudget = Expectation::where('user_id', $user->id)
             ->where('year', $currentYear)
-            ->whereHas('category.movementType', fn($q) => $q->where('is_positive', true))
+            ->whereHas('category.movementType', fn ($q) => $q->where('is_positive', true))
             ->sum('amount');
-            
+
         $incomeBudgetMonthly = $incomeBudget / 12;
-        
+
         return [
-            Stat::make('Income This Month', $user->currency->symbol . number_format($incomeThisMonth, 2))
-                ->description($incomeBudget > 0 ? number_format(($incomeThisMonth / $incomeBudgetMonthly) * 100, 1) . '% of monthly budget' : 'No budget set')
+            Stat::make('Income This Month', $user->currency->symbol.number_format($incomeThisMonth, 2))
+                ->description($incomeBudget > 0 ? number_format(($incomeThisMonth / $incomeBudgetMonthly) * 100, 1).'% of monthly budget' : 'No budget set')
                 ->descriptionIcon($incomeThisMonth >= $incomeBudgetMonthly ? 'heroicon-o-arrow-up' : 'heroicon-o-arrow-down')
                 ->color($incomeThisMonth >= $incomeBudgetMonthly ? 'success' : 'info')
                 ->icon('heroicon-o-arrow-up-circle'),
-            
-            Stat::make('Expenses This Month', $user->currency->symbol . number_format($expensesThisMonth, 2))
+
+            Stat::make('Expenses This Month', $user->currency->symbol.number_format($expensesThisMonth, 2))
                 ->description('Total spent this month')
                 ->color('info')
                 ->icon('heroicon-o-arrow-down-circle'),
-            
-            Stat::make('Monthly Savings', $user->currency->symbol . number_format($savingsThisMonth, 2))
+
+            Stat::make('Monthly Savings', $user->currency->symbol.number_format($savingsThisMonth, 2))
                 ->description($savingsThisMonth >= 0 ? 'Positive balance' : 'Negative balance')
                 ->color($savingsThisMonth >= 0 ? 'success' : 'info')
                 ->icon($savingsThisMonth >= 0 ? 'heroicon-o-banknotes' : 'heroicon-o-exclamation-triangle'),

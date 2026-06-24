@@ -2,6 +2,11 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Widgets\ActualIncomeVsActualExpense;
+use App\Filament\Widgets\ExpenseBudgetVsActualExpense;
+use App\Filament\Widgets\IncomeBudgetVsActualIncome;
+use App\Filament\Widgets\RecentMovements;
+use App\Filament\Widgets\StatsOverview;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -9,24 +14,12 @@ use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
-use Filament\Widgets\AccountWidget;
-use Filament\Widgets\FilamentInfoWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-
-use App\Filament\Widgets\IncomeBudgetVsActualIncome;
-use App\Filament\Widgets\ExpenseBudgetVsActualExpense;
-use App\Filament\Widgets\RecentMovements;
-use App\Filament\Widgets\StatsOverview;
-use App\Filament\Widgets\ActualIncomeVsActualExpense;
-
-
-use Illuminate\Support\HtmlString;
-
 
 class AdminPanelProvider extends PanelProvider
 {

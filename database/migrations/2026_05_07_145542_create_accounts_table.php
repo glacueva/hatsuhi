@@ -30,9 +30,9 @@ return new class extends Migration
         });
 
         // Create main account for each user
-        $users = \DB::table('users')->get();
+        $users = DB::table('users')->get();
         foreach ($users as $user) {
-            \DB::table('accounts')->insert([
+            DB::table('accounts')->insert([
                 'user_id' => $user->id,
                 'name' => 'Main Account',
                 'balance' => 0,
@@ -42,9 +42,9 @@ return new class extends Migration
             ]);
         }
 
-        $accounts = \DB::table('accounts')->get();
+        $accounts = DB::table('accounts')->get();
         foreach ($accounts as $account) {
-            \DB::table('movements')->where('user_id', $account->user_id)
+            DB::table('movements')->where('user_id', $account->user_id)
                 ->update(['account_id' => $account->id]);
         }
     }

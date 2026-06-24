@@ -13,10 +13,10 @@ class DatabaseSeeder extends Seeder
     {
         // Run CurrencySeeder first (for foreign key constraint)
         $this->call(CurrencySeeder::class);
-        
+
         // Then run UserSeeder
         $this->call(UserSeeder::class);
-        
+
         // You can add more seeders here as needed
     }
 }

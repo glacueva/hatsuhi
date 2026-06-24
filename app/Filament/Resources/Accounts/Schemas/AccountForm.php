@@ -29,7 +29,7 @@ class AccountForm
                     ->required()
                     ->numeric()
                     ->default(0.0),
-                
+
             ])->columns(1);
     }
 }

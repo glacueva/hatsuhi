@@ -3,34 +3,34 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Views\FlowMovementsView;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\IconColumn;
-use Filament\Tables\Table;
-use Filament\Widgets\TableWidget;
-use Filament\Widgets\Concerns\InteractsWithPageFilters;
-use Illuminate\Database\Eloquent\Builder;
-use Filament\Tables\Columns\Summarizers\Sum;
-use Filament\Support\Icons\Heroicon;
-
-use Filament\Tables\Filters\SelectFilter;
-use Filament\Tables\Filters\Filter;
 use Filament\Forms\Components\DatePicker;
+use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\Summarizers\Sum;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Table;
+use Filament\Widgets\Concerns\InteractsWithPageFilters;
+use Filament\Widgets\TableWidget;
+use Illuminate\Database\Eloquent\Builder;
 
 class RecentMovements extends TableWidget
 {
     use InteractsWithPageFilters;
 
-    protected int | string | array $columnSpan = 2;
-    protected ?string $pollingInterval = null;
-    protected static ?int $sort = 3;
+    protected int|string|array $columnSpan = 2;
 
+    protected ?string $pollingInterval = null;
+
+    protected static ?int $sort = 3;
 
     public function table(Table $table): Table
     {
         $selectedYear = $this->pageFilters['year'] ?? now()->year;
         $selectedMonth = $this->pageFilters['month'] ?? now()->month;
         $selectedAccount = $this->pageFilters['account'] ?? null;
-        
+
         return $table
             ->query(function () use ($selectedYear, $selectedMonth, $selectedAccount): Builder {
                 $query = FlowMovementsView::query()
@@ -45,12 +45,12 @@ class RecentMovements extends TableWidget
 
                 return $query;
             })
-            ->heading('Recent Movements - ' . date('F Y', mktime(0, 0, 0, $selectedMonth, 1, $selectedYear)))
+            ->heading('Recent Movements - '.date('F Y', mktime(0, 0, 0, $selectedMonth, 1, $selectedYear)))
             ->columns([
                 IconColumn::make('positive_flow')
                     ->label('Flow')
                     ->icon(
-                        fn($state) => $state ? Heroicon::ArrowTrendingUp : Heroicon::ArrowTrendingDown
+                        fn ($state) => $state ? Heroicon::ArrowTrendingUp : Heroicon::ArrowTrendingDown
                     )
                     ->color(fn (bool $state): string => match ($state) {
                         true => 'success',
@@ -69,7 +69,7 @@ class RecentMovements extends TableWidget
                 TextColumn::make('concept')
                     ->searchable(),
                 TextColumn::make('amount')
-                    ->money(fn($record) => $record?->currency_short ?? 'EUR')
+                    ->money(fn ($record) => $record?->currency_short ?? 'EUR')
                     ->sortable()
                     ->summarize(
                         Sum::make('amount')
@@ -78,7 +78,7 @@ class RecentMovements extends TableWidget
                     ),
                 TextColumn::make('shared_amount')
                     ->label('Share')
-                    ->money(fn($record) => $record?->currency_short ?? 'EUR')
+                    ->money(fn ($record) => $record?->currency_short ?? 'EUR')
                     ->sortable()
                     ->summarize(
                         Sum::make('shared_amount')
@@ -112,7 +112,7 @@ class RecentMovements extends TableWidget
                             ->when($data['date_until'],
                                 fn (Builder $query, $date): Builder => $query->whereDate('date', '<=', $date),
                             );
-                    })
+                    }),
 
             ])
             ->defaultSort('date', 'desc');

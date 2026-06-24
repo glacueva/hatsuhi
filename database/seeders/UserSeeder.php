@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use App\Models\Currency;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -16,8 +16,8 @@ class UserSeeder extends Seeder
     {
         // Get the Euro currency (assuming EUR is the first one seeded)
         $euroCurrency = Currency::where('short', 'EUR')->first();
-        
-        if (!$euroCurrency) {
+
+        if (! $euroCurrency) {
             // If EUR doesn't exist, use the first currency
             $euroCurrency = Currency::first();
         }

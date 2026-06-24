@@ -15,19 +15,23 @@ class Account extends Model
         'is_shared',
         'share',
     ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
+
     public function movements()
     {
         return $this->hasMany(Movement::class);
     }
 
-    protected static function booted() { 
-        static::creating(function ($post) { 
-            if (auth()->check()) { $post->user_id = auth()->id(); } 
-        }); 
+    protected static function booted()
+    {
+        static::creating(function ($post) {
+            if (auth()->check()) {
+                $post->user_id = auth()->id();
+            }
+        });
     }
-
 }

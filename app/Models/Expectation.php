@@ -42,7 +42,8 @@ class Expectation extends Model
     public function getFormattedAmountAttribute()
     {
         $currencySymbol = $this->user->currency->symbol ?? '$';
-        return $currencySymbol . number_format($this->amount, 2);
+
+        return $currencySymbol.number_format($this->amount, 2);
     }
 
     // Scopes
@@ -86,16 +87,19 @@ class Expectation extends Model
                 ->where('year', $expectation->year)
                 ->where('id', '!=', $expectation->id)
                 ->first();
-                
+
             if ($existing) {
-                throw new \Exception("Expectation for this category and year already exists.");
+                throw new \Exception('Expectation for this category and year already exists.');
             }
         });
     }
 
-    protected static function booted() { 
-        static::creating(function ($post) { 
-            if (auth()->check()) { $post->user_id = auth()->id(); } 
-        }); 
+    protected static function booted()
+    {
+        static::creating(function ($post) {
+            if (auth()->check()) {
+                $post->user_id = auth()->id();
+            }
+        });
     }
 }

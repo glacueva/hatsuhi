@@ -28,7 +28,7 @@ return new class extends Migration
             $table->double('shared_amount', 2, 2)->nullable()->after('amount')
                 ->comment('Percentage of the movement amount that belongs to the user, only applicable if the account is shared');
         });
-        \DB::statement('UPDATE movements SET shared_amount = amount WHERE shared_amount IS NULL');
+        DB::statement('UPDATE movements SET shared_amount = amount WHERE shared_amount IS NULL');
     }
 
     /**

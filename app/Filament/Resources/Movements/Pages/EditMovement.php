@@ -19,10 +19,8 @@ class EditMovement extends EditRecord
         ];
     }
 
-    protected function mutateFormDataBeforeSave(array $data): array 
+    protected function mutateFormDataBeforeSave(array $data): array
     {
         return MovementResource::compensateMovement($data);
     }
-
-    
 }
