@@ -14,14 +14,12 @@ class UserObserver
         // Create default types for the new user/tenant
         $income = $user->movementTypes()->create([
             'name' => 'General Income',
-            'is_positive' => true,
-            'tenant_id' => $user->id,
+            'is_positive' => true
         ]);
 
         $expense = $user->movementTypes()->create([
             'name' => 'General Expense',
-            'is_positive' => false,
-            'tenant_id' => $user->id,
+            'is_positive' => false
         ]);
     }
 
