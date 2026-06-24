@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Movements\Tables;
 
 use App\Filament\Exports\MovementExporter;
 use App\Filament\Imports\MovementImporter;
+use App\Filament\Resources\Movements\MovementResource;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
@@ -104,25 +105,35 @@ class MovementsTable
             ])
             ->recordActions([
                 ViewAction::make()->iconButton(),
-                EditAction::make()->iconButton(),
+                EditAction::make()
+                    ->mutateFormDataUsing(function (array $data): array {
+                        return MovementResource::compensateMovement($data);
+                    })
+                    ->iconButton(),
                 DeleteAction::make()->iconButton(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
+                    /*
+                    * COMMENTED OUT FOR NOW, AS IT'S NOT NEEDED AT THE MOMENT
                     ExportBulkAction::make()
                         ->exporter(MovementExporter::class) // La clase que creamos antes
                         ->label('Export CSV')
                         ->icon('heroicon-o-arrow-down-circle')
                         ->color('info'),
+                    */
                 ]),
             ])
             ->headerActions([
+                /*
+                * COMMENTED OUT FOR NOW, AS IT'S NOT NEEDED AT THE MOMENT
                 ImportAction::make()
                     ->importer(MovementImporter::class) // La clase que creamos antes
                     ->label('Import CSV')
                     ->icon('heroicon-o-arrow-up-tray')
                     ->color('warning'),
+                */
 
             ])
             ->defaultSort('date', 'desc');

@@ -3,9 +3,7 @@
 namespace App\Filament\Resources\Movements;
 
 use App\Filament\Resources\Movements\Pages\CreateMovement;
-use App\Filament\Resources\Movements\Pages\EditMovement;
 use App\Filament\Resources\Movements\Pages\ListMovements;
-use App\Filament\Resources\Movements\Pages\ViewMovement;
 use App\Filament\Resources\Movements\Schemas\MovementForm;
 use App\Filament\Resources\Movements\Schemas\MovementInfolist;
 use App\Filament\Resources\Movements\Tables\MovementsTable;
@@ -17,6 +15,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 
 class MovementResource extends Resource
 {
@@ -53,20 +52,19 @@ class MovementResource extends Resource
         return [
             'index' => ListMovements::route('/'),
             'create' => CreateMovement::route('/create'),
-            'view' => ViewMovement::route('/{record}'),
-            'edit' => EditMovement::route('/{record}/edit'),
         ];
     }
 
     public static function getEloquentQuery(): Builder
     {
-        $action = class_basename(request()->route()->controller);
+        $query = parent::getEloquentQuery();
 
-        if (in_array($action, ['ListMovements', 'HandleRequests'])) {
-            $query = FlowMovementsView::query();
-        } else {
-            $query = parent::getEloquentQuery();
-        }
+        $query->addSelect([
+            'positive_flow' => FlowMovementsView::select('positive_flow')
+                ->whereColumn('id', 'movements.id')
+                ->limit(1),
+            'currency_short' => DB::raw("'".auth()->user()->currency->short."'"),
+        ]);
 
         return $query->where('user_id', auth()->id());
     }
