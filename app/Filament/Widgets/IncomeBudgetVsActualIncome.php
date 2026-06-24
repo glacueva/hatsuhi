@@ -36,7 +36,7 @@ class IncomeBudgetVsActualIncome extends ChartWidget
         // Get actual monthly data
         $actuals = IncomeMovementView::where('user_id', $user->id)
             ->where('year', $currentYear)
-            ->when($selectedAccount, function ($query) use ($selectedAccount) {
+            ->when($selectedAccount, function ($query) use ($selectedAccount): void {
                 $query->where('account_id', $selectedAccount);
             })
             ->select('month', 'total_amount')

@@ -60,14 +60,14 @@ class Movement extends Model
     // Scopes
     public function scopeIncome($query)
     {
-        return $query->whereHas('category.movementType', function ($q) {
+        return $query->whereHas('category.movementType', function ($q): void {
             $q->where('is_positive', true);
         });
     }
 
     public function scopeExpense($query)
     {
-        return $query->whereHas('category.movementType', function ($q) {
+        return $query->whereHas('category.movementType', function ($q): void {
             $q->where('is_positive', false);
         });
     }
@@ -92,7 +92,7 @@ class Movement extends Model
 
     protected static function booted()
     {
-        static::creating(function ($post) {
+        static::creating(function ($post): void {
             if (auth()->check()) {
                 $post->user_id = auth()->id();
             }

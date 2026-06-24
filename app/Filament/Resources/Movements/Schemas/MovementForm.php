@@ -36,7 +36,7 @@ class MovementForm
                     ->numeric()
                     ->rules(['min:0.01'])
                     ->live(onBlur: true)
-                    ->afterStateUpdated(function ($state, callable $set, callable $get) {
+                    ->afterStateUpdated(function ($state, callable $set, callable $get): void {
                         if ($state) {
                             $set('shared_amount', round($state * ($get('share') / 100), 2));
                         }
@@ -56,7 +56,7 @@ class MovementForm
                     })
                     ->numeric()
                     ->live(onBlur: true)
-                    ->afterStateUpdated(function ($state, callable $set) {
+                    ->afterStateUpdated(function ($state, callable $set): void {
                         if ($state) {
                             $set('shared_amount', round(0 * ($state / 100), 2));
                         }
@@ -83,7 +83,7 @@ class MovementForm
                         return auth()->user()->accounts()->where('is_main', true)->first()?->id;
                     })
                     ->live(onBlur: true)
-                    ->afterStateUpdated(function ($state, callable $set) {
+                    ->afterStateUpdated(function ($state, callable $set): void {
                         if ($state) {
                             $account = auth()->user()->accounts()->find($state);
                             $set('share', $account ? $account->share : 0);

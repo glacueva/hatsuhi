@@ -51,7 +51,7 @@ class MovementCategoriesTable
                 ViewAction::make(),
                 EditAction::make(),
                 DeleteAction::make()
-                    ->before(function ($record) {
+                    ->before(function ($record): void {
                         // Prevent deletion if there are movements
                         $movCount = $record->movements()->count() > 0;
                         $expCount = $record->expectations()->count() > 0;

@@ -36,7 +36,7 @@ class RecentMovements extends TableWidget
                 $query = FlowMovementsView::query()
                     ->whereYear('date', $selectedYear)
                     ->whereMonth('date', $selectedMonth)
-                    ->when($selectedAccount, function ($query) use ($selectedAccount) {
+                    ->when($selectedAccount, function ($query) use ($selectedAccount): void {
                         $query->where('account_id', $selectedAccount);
                     })
                     ->where('user_id', auth()->id())

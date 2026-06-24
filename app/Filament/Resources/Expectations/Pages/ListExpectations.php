@@ -31,7 +31,7 @@ class ListExpectations extends ListRecords
                         ->default(now()->year)
                         ->required(),
                 ])
-                ->action(function (array $data) {
+                ->action(function (array $data): void {
                     $expectations = Expectation::where('year', $data['from_year'])
                         ->where('user_id', auth()->id())
                         ->get();

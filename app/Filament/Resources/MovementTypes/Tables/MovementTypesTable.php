@@ -56,7 +56,7 @@ class MovementTypesTable
                 ViewAction::make(),
                 EditAction::make(),
                 DeleteAction::make()
-                    ->before(function ($record) {
+                    ->before(function ($record): void {
                         // Prevent deletion if there are categories
                         if ($record->categories()->count() > 0) {
                             throw new \Exception('Cannot delete movement type with existing categories.');

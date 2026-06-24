@@ -39,7 +39,7 @@ class ExpenseCategoryByMonthChart extends ChartWidget
 
         $data = ExpenseMovementCategoryView::where('month', $selectedMonth)
             ->where('year', $selectedYear)
-            ->when($selectedAccount, function ($query) use ($selectedAccount) {
+            ->when($selectedAccount, function ($query) use ($selectedAccount): void {
                 $query->where('account_id', $selectedAccount);
             })
             ->where('user_id', auth()->id())

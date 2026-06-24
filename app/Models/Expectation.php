@@ -54,14 +54,14 @@ class Expectation extends Model
 
     public function scopeIncomeExpectations($query)
     {
-        return $query->whereHas('category.movementType', function ($q) {
+        return $query->whereHas('category.movementType', function ($q): void {
             $q->where('is_positive', true);
         });
     }
 
     public function scopeExpenseExpectations($query)
     {
-        return $query->whereHas('category.movementType', function ($q) {
+        return $query->whereHas('category.movementType', function ($q): void {
             $q->where('is_positive', false);
         });
     }
@@ -80,7 +80,7 @@ class Expectation extends Model
     {
         parent::boot();
 
-        static::saving(function ($expectation) {
+        static::saving(function ($expectation): void {
             // Ensure unique constraint at application level too
             $existing = self::where('user_id', $expectation->user_id)
                 ->where('movement_category_id', $expectation->movement_category_id)
@@ -96,7 +96,7 @@ class Expectation extends Model
 
     protected static function booted()
     {
-        static::creating(function ($post) {
+        static::creating(function ($post): void {
             if (auth()->check()) {
                 $post->user_id = auth()->id();
             }

@@ -31,7 +31,7 @@ class StatsOverview extends StatsOverviewWidget
         $incomeThisMonth = IncomeMovementView::where('user_id', $user->id)
             ->where('year', $currentYear)
             ->where('month', $currentMonth)
-            ->when($selectedAccount, function ($query) use ($selectedAccount) {
+            ->when($selectedAccount, function ($query) use ($selectedAccount): void {
                 $query->where('account_id', $selectedAccount);
             })
             ->sum('total_amount');
@@ -39,7 +39,7 @@ class StatsOverview extends StatsOverviewWidget
         $expensesThisMonth = ExpenseMovementView::where('user_id', $user->id)
             ->where('year', $currentYear)
             ->where('month', $currentMonth)
-            ->when($selectedAccount, function ($query) use ($selectedAccount) {
+            ->when($selectedAccount, function ($query) use ($selectedAccount): void {
                 $query->where('account_id', $selectedAccount);
             })
             ->sum('total_amount');
