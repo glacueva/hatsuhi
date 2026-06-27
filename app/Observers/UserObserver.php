@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\User;
+use App\Models\Currency;
 
 class UserObserver
 {
@@ -11,6 +12,10 @@ class UserObserver
      */
     public function created(User $user)
     {
+        $user->update([
+            'currency_id' => Currency::first()?->id,
+        ]);
+
         // Create default types for the new user/tenant
         $income = $user->movementTypes()->create([
             'name' => 'General Income',
