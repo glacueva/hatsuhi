@@ -2,11 +2,13 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\EditProfile;
 use App\Filament\Widgets\ActualIncomeVsActualExpense;
 use App\Filament\Widgets\ExpenseBudgetVsActualExpense;
 use App\Filament\Widgets\IncomeBudgetVsActualIncome;
 use App\Filament\Widgets\RecentMovements;
 use App\Filament\Widgets\StatsOverview;
+use App\Http\Middleware\SetUserLocale;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -33,7 +35,7 @@ class AdminPanelProvider extends PanelProvider
             ->registration()
             ->passwordReset()
             ->emailVerification()
-            ->profile()
+            ->profile(EditProfile::class)
             ->databaseNotifications()
             ->brandLogo(fn () => view('assets.logo'))
             ->brandName('Hatsuhi')
@@ -62,6 +64,7 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                SetUserLocale::class,
             ])
             ->authMiddleware([
                 Authenticate::class,

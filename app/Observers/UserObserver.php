@@ -2,8 +2,9 @@
 
 namespace App\Observers;
 
-use App\Models\User;
+use App\Enums\Locale;
 use App\Models\Currency;
+use App\Models\User;
 
 class UserObserver
 {
@@ -14,27 +15,25 @@ class UserObserver
     {
         $user->update([
             'currency_id' => Currency::first()?->id,
+            'locale' => $user->locale ?? Locale::EN,
         ]);
 
         // Create default types for the new user/tenant
         $income = $user->movementTypes()->create([
             'name' => 'General Income',
-            'is_positive' => true
+            'is_positive' => true,
         ]);
 
         $expense = $user->movementTypes()->create([
             'name' => 'General Expense',
-            'is_positive' => false
+            'is_positive' => false,
         ]);
     }
 
     /**
      * Handle the User "updated" event.
      */
-    public function updated(User $user): void
-    {
-        //
-    }
+    public function updated(User $user): void {}
 
     /**
      * Handle the User "deleted" event.

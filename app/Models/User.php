@@ -15,6 +15,7 @@ class User extends Authenticatable implements FilamentUser
     protected $fillable = [
         'name',
         'email',
+        'locale',
         'password',
         'currency_id',
         'is_admin',
@@ -29,6 +30,7 @@ class User extends Authenticatable implements FilamentUser
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
         'is_admin' => 'boolean',
+        'locale' => 'string',
     ];
 
     // Relationships
