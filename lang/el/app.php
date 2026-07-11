@@ -1,6 +1,10 @@
 <?php
 
 return [
+    'create' => 'δημιουργώ :record',
+    'edit' => 'επεξεργάζομαι :record',
+    'view' => 'προβάλλω :record',
+    'delete' => 'διαγράφω :record',
     'hatsuhi' => [
         'income' => 'Έσοδα',
         'expense' => 'Έξοδα',
@@ -29,7 +33,7 @@ return [
             'expense_this_month' => 'Έξοδα αυτού του μήνα',
             'monthly_savings' => 'Μηνιαία αποταμίευση',
             'positive_balance' => 'Θετικό υπόλοιπο',
-            'Negative_balance' => 'Αρνητικό υπόλοιπο',
+            'negative_balance' => 'Αρνητικό υπόλοιπο',
         ],
     ],
     'months' => [

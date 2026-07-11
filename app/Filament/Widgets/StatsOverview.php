@@ -54,19 +54,19 @@ class StatsOverview extends StatsOverviewWidget
         $incomeBudgetMonthly = $incomeBudget / 12;
 
         return [
-            Stat::make('Income This Month', $user->currency->symbol.number_format($incomeThisMonth, 2))
-                ->description($incomeBudget > 0 ? number_format(($incomeThisMonth / $incomeBudgetMonthly) * 100, 1).'% of monthly budget' : 'No budget set')
+            Stat::make(__('app.hatsuhi.widgets.income_this_month'), $user->currency->symbol.number_format($incomeThisMonth, 2))
+                ->description($incomeBudget > 0 ? number_format(($incomeThisMonth / $incomeBudgetMonthly) * 100, 1).__('app.hatsuhi.widgets.percent_of_monthly_budget') : __('app.hatsuhi.widgets.no_budget_set'))
                 ->descriptionIcon($incomeThisMonth >= $incomeBudgetMonthly ? 'heroicon-o-arrow-up' : 'heroicon-o-arrow-down')
                 ->color($incomeThisMonth >= $incomeBudgetMonthly ? 'success' : 'info')
                 ->icon('heroicon-o-arrow-up-circle'),
 
-            Stat::make('Expenses This Month', $user->currency->symbol.number_format($expensesThisMonth, 2))
-                ->description('Total spent this month')
+            Stat::make(__('app.hatsuhi.expense'), $user->currency->symbol.number_format($expensesThisMonth, 2))
+                ->description(__('app.hatsuhi.widgets.expense_this_month'))
                 ->color('info')
                 ->icon('heroicon-o-arrow-down-circle'),
 
-            Stat::make('Monthly Savings', $user->currency->symbol.number_format($savingsThisMonth, 2))
-                ->description($savingsThisMonth >= 0 ? 'Positive balance' : 'Negative balance')
+            Stat::make(__('app.hatsuhi.widgets.monthly_savings'), $user->currency->symbol.number_format($savingsThisMonth, 2))
+                ->description($savingsThisMonth >= 0 ? __('app.hatsuhi.widgets.positive_balance') : __('app.hatsuhi.widgets.negative_balance'))
                 ->color($savingsThisMonth >= 0 ? 'success' : 'info')
                 ->icon($savingsThisMonth >= 0 ? 'heroicon-o-banknotes' : 'heroicon-o-exclamation-triangle'),
         ];

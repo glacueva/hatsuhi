@@ -1,6 +1,10 @@
 <?php
 
 return [
+    'create' => 'Crear :record',
+    'edit' => 'Editar :record',
+    'view' => 'Veure :record',
+    'delete' => 'Eliminar :record',
     'hatsuhi' => [
         'income' => 'Ingressos',
         'expense' => 'Despeses',
@@ -12,8 +16,8 @@ return [
         'all_accounts' => 'Tots els comptes',
         'groups' => [
             'settings' => 'Configuració',
-            'dashboard_settings' => 'Configuració del panell',
-            'dashboard' => 'Panell',
+            'dashboard_settings' => 'Configuració de l\'escriptori',
+            'dashboard' => 'Escriptori',
         ],
         'widgets' => [
             'actual_income_actual_expense' => 'Ingressos reals VS Despeses reals',
@@ -25,11 +29,11 @@ return [
             'date_until' => 'Fins a',
             'no_budget_set' => 'No hi ha pressupost definit',
             'percent_of_monthly_budget' => '% del pressupost mensual',
-            'income_this_month' => 'Ingressos aquest mes',
-            'expense_this_month' => 'Despeses aquest mes',
+            'income_this_month' => 'Ingressos d\'aquest mes',
+            'expense_this_month' => 'Despeses d\'aquest mes',
             'monthly_savings' => 'Estalvi mensual',
             'positive_balance' => 'Saldo positiu',
-            'Negative_balance' => 'Saldo negatiu',
+            'negative_balance' => 'Saldo negatiu',
         ],
     ],
     'months' => [

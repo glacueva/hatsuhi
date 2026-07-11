@@ -1,6 +1,10 @@
 <?php
 
 return [
+    'create' => 'Create :record',
+    'edit' => 'Edit :record',
+    'view' => 'View :record',
+    'delete' => 'Delete :record',
     'hatsuhi' => [
         'income' => 'Income',
         'expense' => 'Expense',
@@ -29,7 +33,7 @@ return [
             'expense_this_month' => 'Expenses this month',
             'monthly_savings' => 'Monthly Savings',
             'positive_balance' => 'Positive Balance',
-            'Negative_balance' => 'Negative Balance',
+            'negative_balance' => 'Negative Balance',
         ],
     ],
     'months' => [

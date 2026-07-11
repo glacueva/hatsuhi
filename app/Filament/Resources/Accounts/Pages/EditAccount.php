@@ -16,4 +16,9 @@ class EditAccount extends EditRecord
             DeleteAction::make(),
         ];
     }
+
+    public function getTitle(): string
+    {
+        return __('app.edit', ['record' => __('app.accounts.single')]);
+    }
 }

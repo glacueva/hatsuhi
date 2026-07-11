@@ -81,4 +81,9 @@ class MovementResource extends Resource
 
         return $data;
     }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('app.movements.title');
+    }
 }

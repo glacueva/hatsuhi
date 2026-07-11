@@ -13,19 +13,25 @@ class AccountForm
         return $schema
             ->components([
                 TextInput::make('name')
-                    ->required(),
+                    ->required()
+                    ->label(__('app.accounts.fields.name')),
                 Toggle::make('is_main')
-                    ->required(),
+                    ->required()
+                    ->label(__('app.accounts.fields.is_main')),
                 Toggle::make('is_shared')
-                    ->required(),
+                    ->required()
+                    ->label(__('app.accounts.fields.is_shared')),
                 TextInput::make('share')
-                    ->helperText('% of shared account (if applies)')
+                    ->label(__('app.accounts.fields.share'))
+                    ->helperText(__('app.accounts.fields.share_helper'))
                     ->requiredIf('is_shared', true)
                     ->numeric()
-                    ->default(0.0)
+                    ->default(100)
                     ->maxValue(100)
                     ->minValue(0),
                 TextInput::make('balance')
+                    ->label(__('app.accounts.fields.balance'))
+                    ->hidden() // TODO: Remove this line when the balance is calculated automatically
                     ->required()
                     ->numeric()
                     ->default(0.0),

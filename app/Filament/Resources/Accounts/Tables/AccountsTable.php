@@ -16,27 +16,20 @@ class AccountsTable
         return $table
             ->columns([
                 TextColumn::make('name')
-                    ->searchable(),
-                TextColumn::make('balance')
-                    ->numeric()
-                    ->sortable(),
+                    ->searchable()
+                    ->label(__('app.accounts.fields.name')),
                 IconColumn::make('is_main')
                     ->boolean()
-                    ->sortable(),
+                    ->sortable()
+                    ->label(__('app.accounts.fields.is_main')),
                 IconColumn::make('is_shared')
                     ->boolean()
-                    ->sortable(),
+                    ->sortable()
+                    ->label(__('app.accounts.fields.is_shared')),
                 TextColumn::make('share')
                     ->numeric()
-                    ->sortable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->label(__('app.accounts.fields.share')),
             ])
             ->filters([
                 //

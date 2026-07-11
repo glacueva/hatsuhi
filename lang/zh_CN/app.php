@@ -1,6 +1,10 @@
 <?php
 
 return [
+    'create' => '创建 :record',
+    'edit' => '编辑 :record',
+    'view' => '查看 :record',
+    'delete' => '删除 :record',
     'hatsuhi' => [
         'income' => '收入',
         'expense' => '支出',
@@ -29,7 +33,7 @@ return [
             'expense_this_month' => '本月支出',
             'monthly_savings' => '月度储蓄',
             'positive_balance' => '正余额',
-            'Negative_balance' => '负余额',
+            'negative_balance' => '负余额',
         ],
     ],
     'months' => [
