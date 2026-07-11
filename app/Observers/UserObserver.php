@@ -20,12 +20,12 @@ class UserObserver
 
         // Create default types for the new user/tenant
         $income = $user->movementTypes()->create([
-            'name' => 'General Income',
+            'name' => __('app.hatsuhi.income', [], $user->locale->value),
             'is_positive' => true,
         ]);
 
         $expense = $user->movementTypes()->create([
-            'name' => 'General Expense',
+            'name' => __('app.hatsuhi.expense', [], $user->locale->value),
             'is_positive' => false,
         ]);
     }

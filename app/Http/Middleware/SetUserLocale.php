@@ -16,7 +16,7 @@ class SetUserLocale
     {
         // Check if the user is authenticated and has a preferred locale
         if (auth()->check() && auth()->user()->locale) {
-            App::setLocale(auth()->user()->locale);
+            App::setLocale(auth()->user()->locale->value);
         }
 
         return $next($request);
