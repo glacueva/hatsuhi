@@ -32,4 +32,16 @@ enum Locale: string
 
         return $options;
     }
+
+    public function dateFormat(): string
+    {
+        return match ($this) {
+            self::EN => 'm/d/Y',
+            self::CA => 'd/m/Y',
+            self::EL => 'd/m/Y',
+            self::ES => 'd/m/Y',
+            self::ZH => 'Y/m/d',
+            default => throw new \UnexpectedValueException("Unknown locale: {$this->value}"),
+        };
+    }
 }

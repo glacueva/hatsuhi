@@ -10,8 +10,6 @@ class ExpenseCategoryByMonthChart extends ChartWidget
 {
     use InteractsWithPageFilters;
 
-    protected ?string $heading = 'Expense Categories';
-
     protected int|string|array $columnSpan = 1;
 
     protected ?string $pollingInterval = null;
@@ -54,7 +52,7 @@ class ExpenseCategoryByMonthChart extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Expense',
+                    'label' => __('app.hatsuhi.expense'),
                     'data' => array_column($data, 'total_amount'),
                     'backgroundColor' => $colors,
                 ],
@@ -75,5 +73,10 @@ class ExpenseCategoryByMonthChart extends ChartWidget
         }
 
         return $this->pastelColors[$index];
+    }
+
+    public function getHeading(): string
+    {
+        return __('app.hatsuhi.widgets.expense_categories');
     }
 }

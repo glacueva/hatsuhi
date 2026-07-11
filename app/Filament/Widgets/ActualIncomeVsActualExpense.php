@@ -2,6 +2,7 @@
 
 namespace App\Filament\Widgets;
 
+use App\Enums\Month;
 use App\Models\Views\ExpenseMovementView;
 use App\Models\Views\IncomeMovementView;
 use Filament\Widgets\ChartWidget;
@@ -11,7 +12,7 @@ class ActualIncomeVsActualExpense extends ChartWidget
 {
     use InteractsWithPageFilters;
 
-    protected ?string $heading = 'Actual Income Vs Actual Expense';
+    protected ?string $heading = 'Income vs Expense';
 
     protected int|string|array $columnSpan = 1;
 
@@ -48,7 +49,7 @@ class ActualIncomeVsActualExpense extends ChartWidget
             ->pluck('total_amount', 'month')
             ->toArray();
 
-        $months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        $months = Month::shortOptions(onlyValues: true);
 
         $budgetData = [];
         $actualData = [];
@@ -61,7 +62,7 @@ class ActualIncomeVsActualExpense extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Income',
+                    'label' => __('app.hatsuhi.income'),
                     'data' => $budgetData,
                     'borderColor' => 'lightgreen',
                     'backgroundColor' => 'rgba(59, 130, 246, 0.1)',
@@ -69,7 +70,7 @@ class ActualIncomeVsActualExpense extends ChartWidget
                     'tension' => 0.1,
                 ],
                 [
-                    'label' => 'Expense',
+                    'label' => __('app.hatsuhi.expense'),
                     'data' => $actualData,
                     'borderColor' => 'fuchsia',
                     'backgroundColor' => 'rgba(34, 197, 94, 0.1)',
@@ -84,5 +85,10 @@ class ActualIncomeVsActualExpense extends ChartWidget
     protected function getType(): string
     {
         return 'line';
+    }
+
+    public function getHeading(): string
+    {
+        return __('app.hatsuhi.widgets.actual_income_actual_expense');
     }
 }

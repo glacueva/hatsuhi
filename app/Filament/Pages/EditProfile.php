@@ -15,7 +15,7 @@ class EditProfile extends BaseEditProfile
             $this->getNameFormComponent(),
             $this->getEmailFormComponent(),
             Select::make('locale')
-                ->label(__('Locale'))
+                ->label('Idioma / Language')
                 ->options(Locale::options())
                 ->default(Locale::EN->value)
                 ->required(),

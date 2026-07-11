@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Enums\Month;
 use Filament\Forms\Components\Select;
 use Filament\Pages\Dashboard\Actions\FilterAction;
 use Filament\Pages\Dashboard as BaseDashboard;
@@ -17,31 +18,18 @@ class Dashboard extends BaseDashboard
             FilterAction::make('Filter by Date')
                 ->schema([
                     Select::make('account')
-                        ->label('Account')
+                        ->label(__('app.accounts.single'))
                         ->options(auth()->user()->accounts()->pluck('name', 'id'))
                         ->searchable()
                         ->preload()
-                        ->placeholder('All accounts'),
+                        ->placeholder(__('app.hatsuhi.all_accounts')),
                     Select::make('month')
-                        ->label('Month')
-                        ->options([
-                            1 => 'January',
-                            2 => 'February',
-                            3 => 'March',
-                            4 => 'April',
-                            5 => 'May',
-                            6 => 'June',
-                            7 => 'July',
-                            8 => 'August',
-                            9 => 'September',
-                            10 => 'October',
-                            11 => 'November',
-                            12 => 'December',
-                        ])
+                        ->label(__('app.hatsuhi.month'))
+                        ->options(Month::options())
                         ->default(now()->month),
 
                     Select::make('year')
-                        ->label('Year')
+                        ->label(__('app.hatsuhi.year'))
                         ->options(function () {
                             $currentYear = now()->year;
                             $years = [];
