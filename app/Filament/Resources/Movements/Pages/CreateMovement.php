@@ -9,6 +9,11 @@ class CreateMovement extends CreateRecord
 {
     protected static string $resource = MovementResource::class;
 
+    public function getTitle(): string
+    {
+        return __('app.create', ['record' => __('app.movements.single')]);
+    }
+
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         // Compensations always comes as a negative number

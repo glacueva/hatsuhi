@@ -16,19 +16,24 @@ class CurrenciesTable
         return $table
             ->columns([
                 TextColumn::make('name')
-                    ->searchable(),
+                    ->searchable()
+                    ->label(__('app.currencies.fields.name')),
                 TextColumn::make('short')
-                    ->searchable(),
+                    ->searchable()
+                    ->label(__('app.currencies.fields.short')),
                 TextColumn::make('symbol')
-                    ->searchable(),
+                    ->searchable()
+                    ->label(__('app.currencies.fields.symbol')),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->label(__('app.users.fields.created_at')),
                 TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->label(__('app.users.fields.updated_at')),
             ])
             ->filters([
                 //

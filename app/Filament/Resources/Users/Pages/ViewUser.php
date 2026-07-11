@@ -13,7 +13,13 @@ class ViewUser extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            EditAction::make(),
+            EditAction::make()
+                ->label(__('app.edit', ['record' => __('app.users.single')])),
         ];
+    }
+
+    public function getTitle(): string
+    {
+        return __('app.view', ['record' => __('app.users.single')]);
     }
 }

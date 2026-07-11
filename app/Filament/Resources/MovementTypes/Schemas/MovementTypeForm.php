@@ -15,10 +15,10 @@ class MovementTypeForm
                 TextInput::make('name')
                     ->required()
                     ->maxLength(255)
-                    ->placeholder('e.g., Income, Expense, Investment'),
+                    ->placeholder(__('app.movement_types.fields.name_placeholder')),
                 Toggle::make('is_positive')
-                    ->label('Positive Movement')
-                    ->helperText('Toggle ON for income, OFF for expense')
+                    ->label(__('app.movement_types.fields.is_positive'))
+                    ->helperText(__('app.movement_types.fields.is_positive_helper'))
                     ->default(false)
                     ->required(),
             ]);

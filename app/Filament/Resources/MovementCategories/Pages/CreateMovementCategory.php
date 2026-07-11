@@ -8,4 +8,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateMovementCategory extends CreateRecord
 {
     protected static string $resource = MovementCategoryResource::class;
+
+    public function getTitle(): string
+    {
+        return __('app.create', ['record' => __('app.categories.single')]);
+    }
 }

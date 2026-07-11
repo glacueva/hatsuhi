@@ -13,7 +13,14 @@ class ListMovementCategories extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            CreateAction::make()
+                ->label(__('app.create', ['record' => __('app.categories.single')]))
+                ->icon('heroicon-o-plus'),
         ];
+    }
+
+    public function getTitle(): string
+    {
+        return __('app.categories.title');
     }
 }

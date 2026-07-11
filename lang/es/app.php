@@ -89,9 +89,19 @@ return [
             'amount' => 'Importe',
             'movement_category' => 'Categoría',
             'monthly_amount' => 'Importe mensual',
+            'year' => 'Año',
         ],
         'actions' => [
             'clone' => 'Duplicar presupuestos del año',
+        ],
+        'labels' => [
+            'yearly_amount' => 'Importe anual',
+            'monthly' => 'Mensual',
+            'source_year' => 'Año origen',
+            'destination_year' => 'Año destino',
+        ],
+        'notifications' => [
+            'year_cloned_successfully' => '¡Año duplicado con éxito!',
         ],
     ],
     'categories' => [
@@ -100,6 +110,24 @@ return [
         'fields' => [
             'name' => 'Nombre',
             'movement_type' => 'Tipo de movimiento',
+        ],
+        'columns' => [
+            'transactions' => 'Transacciones',
+            'budgets' => 'Presupuestos',
+        ],
+    ],
+    'users' => [
+        'title' => 'Usuarios',
+        'single' => 'Usuario',
+        'fields' => [
+            'name' => 'Nombre',
+            'email' => 'Correo electrónico',
+            'email_verified_at' => 'Correo verificado',
+            'password' => 'Contraseña',
+            'currency' => 'Moneda',
+            'is_admin' => 'Administrador',
+            'created_at' => 'Creado el',
+            'updated_at' => 'Actualizado el',
         ],
     ],
     'movements' => [
@@ -110,9 +138,11 @@ return [
             'date' => 'Fecha',
             'amount' => 'Importe',
             'concept' => 'Concepto',
+            'concept_placeholder' => 'p.ej., Salario mensual, Compra de supermercado',
             'share' => 'Participación',
-            'share_helper' => 'Importe compartido (solo si la cuenta es compartida) (solo lectura)',
+            'share_helper' => 'Participación % (solo si la cuenta es compartida)',
             'shared_amount' => 'Importe compartido',
+            'shared_amount_helper' => 'Importe compartido (solo si la cuenta es compartida) (solo lectura)',
             'account' => 'Cuenta',
             'is_compensation' => 'Reembolso',
             'is_compensation_helper' => 'Un reembolso ocurre cuando se realiza un movimiento de compensación: p.ej. debes devolver dinero de un movimiento de ingreso previo y no quieres editar ese movimiento. También sucede al revés, una previa gasto se compensa, por ejemplo el reembolso de una compra.',

@@ -89,9 +89,19 @@ return [
             'amount' => '金额',
             'movement_category' => '类别',
             'monthly_amount' => '月金额',
+            'year' => '年',
         ],
         'actions' => [
             'clone' => '复制年度预算',
+        ],
+        'labels' => [
+            'yearly_amount' => '年金额',
+            'monthly' => '月度',
+            'source_year' => '来源年份',
+            'destination_year' => '目标年份',
+        ],
+        'notifications' => [
+            'year_cloned_successfully' => '年度已成功复制！',
         ],
     ],
     'categories' => [
@@ -100,6 +110,10 @@ return [
         'fields' => [
             'name' => '名称',
             'movement_type' => '交易类型',
+        ],
+        'columns' => [
+            'transactions' => '交易',
+            'budgets' => '预算',
         ],
     ],
     'movements' => [
@@ -110,12 +124,28 @@ return [
             'date' => '日期',
             'amount' => '金额',
             'concept' => '说明',
+            'concept_placeholder' => '例如：每月工资，杂货购物',
             'share' => '份额',
             'share_helper' => '共享金额（仅当账户为共享账户时）（只读）',
             'shared_amount' => '共享金额',
+            'shared_amount_helper' => '共享金额（仅当账户为共享账户时）（只读）',
             'account' => '账户',
             'is_compensation' => '退款',
             'is_compensation_helper' => '当发生补偿交易时会产生退款：例如，你需要退还之前的收入交易中的钱并且不想编辑该交易。相反也会发生，即之前的支出被补偿，例如购物退款。',
+        ],
+    ],
+    'users' => [
+        'title' => '用户',
+        'single' => '用户',
+        'fields' => [
+            'name' => '名称',
+            'email' => '电子邮件地址',
+            'email_verified_at' => '邮箱验证时间',
+            'password' => '密码',
+            'currency' => '货币',
+            'is_admin' => '管理员',
+            'created_at' => '创建于',
+            'updated_at' => '更新于',
         ],
     ],
 ];

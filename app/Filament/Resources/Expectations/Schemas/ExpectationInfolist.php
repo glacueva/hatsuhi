@@ -12,9 +12,11 @@ class ExpectationInfolist
         return $schema
             ->components([
                 TextEntry::make('category.name')
-                    ->label('Category'),
-                TextEntry::make('year'),
+                    ->label(__('app.expectations.fields.movement_category')),
+                TextEntry::make('year')
+                    ->label(__('app.expectations.fields.year')),
                 TextEntry::make('amount')
+                    ->label(__('app.expectations.fields.amount'))
                     ->numeric(),
                 TextEntry::make('created_at')
                     ->dateTime()

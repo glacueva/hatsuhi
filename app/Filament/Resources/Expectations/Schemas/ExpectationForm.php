@@ -14,6 +14,7 @@ class ExpectationForm
         return $schema
             ->components([
                 Select::make('movement_category_id')
+                    ->label(__('app.expectations.fields.movement_category'))
                     ->relationship(
                         'category',
                         'name',
@@ -23,6 +24,7 @@ class ExpectationForm
                     ->searchable()
                     ->preload(),
                 TextInput::make('year')
+                    ->label(__('app.expectations.fields.year'))
                     ->required()
                     ->numeric()
                     ->minValue(2000)
@@ -30,6 +32,7 @@ class ExpectationForm
                     ->default(now()->year)
                     ->suffixIcon('heroicon-o-calendar'),
                 TextInput::make('amount')
+                    ->label(__('app.expectations.fields.amount'))
                     ->required()
                     ->numeric()
                     ->prefix(function ($get) {
@@ -44,7 +47,7 @@ class ExpectationForm
                     })
                     ->rules(['min:0.01']),
                 Placeholder::make('monthly_amount')
-                    ->label('Monthly Amount')
+                    ->label(__('app.expectations.fields.monthly_amount'))
                     ->content(function ($get) {
                         $amount = $get('amount');
                         $symbol = auth()->user()->currency->symbol ?? '$';

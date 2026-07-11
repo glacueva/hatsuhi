@@ -12,7 +12,7 @@ class MovementCategoryInfolist
         return $schema
             ->components([
                 TextEntry::make('movementType.name')
-                    ->label('Type'),
+                    ->label(__('app.categories.fields.movement_type')),
                 TextEntry::make('name'),
                 TextEntry::make('created_at')
                     ->dateTime()

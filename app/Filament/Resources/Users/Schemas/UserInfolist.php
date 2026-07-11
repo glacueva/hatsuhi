@@ -14,8 +14,9 @@ class UserInfolist
             ->components([
                 TextEntry::make('name'),
                 TextEntry::make('email')
-                    ->label('Email address'),
+                    ->label(__('app.users.fields.email')),
                 TextEntry::make('email_verified_at')
+                    ->label(__('app.users.fields.email_verified_at'))
                     ->dateTime()
                     ->placeholder('-'),
                 TextEntry::make('created_at')

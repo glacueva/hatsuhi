@@ -13,6 +13,7 @@ class MovementCategoryForm
         return $schema
             ->components([
                 Select::make('movement_type_id')
+                    ->label(__('app.categories.fields.movement_type'))
                     ->relationship(
                         'movementType',
                         'name',
@@ -20,6 +21,7 @@ class MovementCategoryForm
                     )
                     ->required(),
                 TextInput::make('name')
+                    ->label(__('app.categories.fields.name'))
                     ->required(),
             ]);
     }

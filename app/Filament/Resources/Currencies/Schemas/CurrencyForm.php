@@ -12,11 +12,14 @@ class CurrencyForm
         return $schema
             ->components([
                 TextInput::make('name')
-                    ->required(),
+                    ->required()
+                    ->label(__('app.currencies.fields.name')),
                 TextInput::make('short')
-                    ->required(),
+                    ->required()
+                    ->label(__('app.currencies.fields.short')),
                 TextInput::make('symbol')
-                    ->required(),
+                    ->required()
+                    ->label(__('app.currencies.fields.symbol')),
             ]);
     }
 }

@@ -29,7 +29,7 @@ class MovementsTable
         return $table
             ->columns([
                 IconColumn::make('positive_flow')
-                    ->label('Flow')
+                    ->label(__('app.hatsuhi.flow'))
                     ->icon(
                         fn ($state) => $state ? Heroicon::ArrowTrendingUp : Heroicon::ArrowTrendingDown
                     )
@@ -39,10 +39,11 @@ class MovementsTable
                     })
                     ->toggleable(true),
                 TextColumn::make('account.name')
-                    ->label('Account')
+                    ->label(__('app.movements.fields.account'))
                     ->sortable()
                     ->searchable(),
                 TextColumn::make('category.name')
+                    ->label(__('app.movements.fields.category'))
                     ->sortable()
                     ->searchable(),
                 TextColumn::make('date')
@@ -59,7 +60,7 @@ class MovementsTable
                             ->money(auth()->user()->currency->short)
                     ),
                 TextColumn::make('shared_amount')
-                    ->label('Share')
+                    ->label(__('app.movements.fields.shared_amount'))
                     ->money(fn ($record) => $record?->currency_short ?? 'EUR')
                     ->sortable()
                     ->summarize(
@@ -81,16 +82,18 @@ class MovementsTable
                     ->relationship('account', 'name')
                     ->searchable()
                     ->preload()
-                    ->label('Account'),
+                    ->label(__('app.movements.fields.account')),
                 SelectFilter::make('movement_category_id')
                     ->relationship('category', 'name')
                     ->searchable()
                     ->preload()
-                    ->label('Category'),
+                    ->label(__('app.movements.fields.category')),
                 Filter::make('date')
                     ->form([
-                        DatePicker::make('date_from'),
-                        DatePicker::make('date_until'),
+                        DatePicker::make('date_from')
+                            ->label(__('app.hatsuhi.widgets.date_from')),
+                        DatePicker::make('date_until')
+                            ->label(__('app.hatsuhi.widgets.date_until')),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query
@@ -104,13 +107,15 @@ class MovementsTable
 
             ])
             ->recordActions([
-                ViewAction::make()->iconButton(),
+                ViewAction::make()
+                    ->iconButton(),
                 EditAction::make()
                     ->mutateFormDataUsing(function (array $data): array {
                         return MovementResource::compensateMovement($data);
                     })
                     ->iconButton(),
-                DeleteAction::make()->iconButton(),
+                DeleteAction::make()
+                    ->iconButton(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

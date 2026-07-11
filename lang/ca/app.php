@@ -89,9 +89,19 @@ return [
             'amount' => 'Import',
             'movement_category' => 'Categoria',
             'monthly_amount' => 'Import mensual',
+            'year' => 'Any',
         ],
         'actions' => [
             'clone' => 'Duplicar pressupostos de l\'any',
+        ],
+        'labels' => [
+            'yearly_amount' => 'Import anual',
+            'monthly' => 'Mensual',
+            'source_year' => 'Any origen',
+            'destination_year' => 'Any destin',
+        ],
+        'notifications' => [
+            'year_cloned_successfully' => 'Any duplicat amb èxit!',
         ],
     ],
     'categories' => [
@@ -100,6 +110,10 @@ return [
         'fields' => [
             'name' => 'Nom',
             'movement_type' => 'Tipus de moviment',
+        ],
+        'columns' => [
+            'transactions' => 'Transaccions',
+            'budgets' => 'Pressupostos',
         ],
     ],
     'movements' => [
@@ -110,12 +124,28 @@ return [
             'date' => 'Data',
             'amount' => 'Import',
             'concept' => 'Concepte',
+            'concept_placeholder' => 'p. ex., Sou mensual, Compres d\'alimentació',
             'share' => 'Participació',
-            'share_helper' => 'Import compartit (només si el compte és compartit) (només lectura)',
+            'share_helper' => '% de participació (només si el compte és compartit)',
             'shared_amount' => 'Import compartit',
+            'shared_amount_helper' => 'Import compartit (només si el compte és compartit) (només lectura)',
             'account' => 'Compte',
             'is_compensation' => 'Reemborsament',
             'is_compensation_helper' => 'Un reemborsament es produeix quan es fa un moviment de compensació: p. ex., has de retornar diners d\'un moviment d\'ingressos anterior i no vols editar aquest moviment. També passa a l\'inrevés: una despesa anterior es compensa, per exemple el reemborsament d\'una compra.',
+        ],
+    ],
+    'users' => [
+        'title' => 'Usuaris',
+        'single' => 'Usuari',
+        'fields' => [
+            'name' => 'Nom',
+            'email' => 'Adreça electrònica',
+            'email_verified_at' => 'Correu electrònic verificat el',
+            'password' => 'Contrasenya',
+            'currency' => 'Moneda',
+            'is_admin' => 'Administrador',
+            'created_at' => 'Creat el',
+            'updated_at' => 'Actualitzat el',
         ],
     ],
 ];

@@ -13,7 +13,13 @@ class ViewCurrency extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            EditAction::make(),
+            EditAction::make()
+                ->label(__('app.edit', ['record' => __('app.currencies.single')])),
         ];
+    }
+
+    public function getTitle(): string
+    {
+        return __('app.view', ['record' => __('app.currencies.single')]);
     }
 }

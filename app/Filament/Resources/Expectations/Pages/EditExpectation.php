@@ -14,8 +14,15 @@ class EditExpectation extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            ViewAction::make(),
-            DeleteAction::make(),
+            ViewAction::make()
+                ->label(__('app.view', ['record' => __('app.expectations.single')])),
+            DeleteAction::make()
+                ->label(__('app.delete', ['record' => __('app.expectations.single')])),
         ];
+    }
+
+    public function getTitle(): string
+    {
+        return __('app.edit', ['record' => __('app.expectations.single')]);
     }
 }

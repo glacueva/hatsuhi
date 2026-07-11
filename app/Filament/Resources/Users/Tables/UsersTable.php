@@ -17,9 +17,10 @@ class UsersTable
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->label(__('app.users.fields.name'))
                     ->searchable(),
                 TextColumn::make('email')
-                    ->label('Email address')
+                    ->label(__('app.users.fields.email'))
                     ->searchable(),
                 TextColumn::make('email_verified_at')
                     ->dateTime()
@@ -33,6 +34,7 @@ class UsersTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('currency_id')
+                    ->label(__('app.users.fields.currency'))
                     ->numeric()
                     ->sortable(),
                 IconColumn::make('is_admin')
@@ -42,12 +44,15 @@ class UsersTable
                 //
             ])
             ->recordActions([
-                ViewAction::make(),
-                EditAction::make(),
+                ViewAction::make()
+                    ->label(__('app.view', ['record' => __('app.users.single')])),
+                EditAction::make()
+                    ->label(__('app.edit', ['record' => __('app.users.single')])),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()
+                        ->label(__('app.delete', ['record' => __('app.users.title')])),
                 ]),
             ]);
     }

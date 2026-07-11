@@ -89,9 +89,19 @@ return [
             'amount' => 'Amount',
             'movement_category' => 'Category',
             'monthly_amount' => 'Monthly Amount',
+            'year' => 'Year',
         ],
         'actions' => [
             'clone' => 'Duplicate Year Expectations',
+        ],
+        'labels' => [
+            'yearly_amount' => 'Yearly Amount',
+            'monthly' => 'Monthly',
+            'source_year' => 'Source Year',
+            'destination_year' => 'Destination Year',
+        ],
+        'notifications' => [
+            'year_cloned_successfully' => 'Year duplicated successfully!',
         ],
     ],
     'categories' => [
@@ -100,6 +110,24 @@ return [
         'fields' => [
             'name' => 'Name',
             'movement_type' => 'Movement Type',
+        ],
+        'columns' => [
+            'transactions' => 'Transactions',
+            'budgets' => 'Budgets',
+        ],
+    ],
+    'users' => [
+        'title' => 'Users',
+        'single' => 'User',
+        'fields' => [
+            'name' => 'Name',
+            'email' => 'Email address',
+            'email_verified_at' => 'Email verified at',
+            'password' => 'Password',
+            'currency' => 'Currency',
+            'is_admin' => 'Admin',
+            'created_at' => 'Created at',
+            'updated_at' => 'Updated at',
         ],
     ],
     'movements' => [
@@ -110,12 +138,14 @@ return [
             'date' => 'Date',
             'amount' => 'Amount',
             'concept' => 'Concept',
+            'concept_placeholder' => 'e.g., Monthly salary, Grocery shopping',
             'share' => 'Share',
-            'share_helper' => 'Shared Amount (only if the account is shared) (read-only)',
+            'share_helper' => 'Share % (only if the account is shared)',
             'shared_amount' => 'Shared Amount',
+            'shared_amount_helper' => 'Shared Amount (only if the account is shared) (read-only)',
             'account' => 'Account',
             'is_compensation' => 'Refund',
-            'is_compensation_helper' => 'A refund happens when a componsation movement happens: e.g you have to give back money from a previous Income Movement and you do not want to edit that Movement. It happens also the other way round, a previous Expense is compensated for example the refund of a purchase.',
+            'is_compensation_helper' => 'A refund happens when a compensation movement happens: e.g you have to give back money from a previous Income Movement and you do not want to edit that Movement. It happens also the other way round, a previous Expense is compensated for example the refund of a purchase.',
         ],
     ],
 ];

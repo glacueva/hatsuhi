@@ -14,9 +14,16 @@ class EditMovement extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            ViewAction::make(),
-            DeleteAction::make(),
+            ViewAction::make()
+                ->label(__('app.view', ['record' => __('app.movements.single')])),
+            DeleteAction::make()
+                ->label(__('app.delete', ['record' => __('app.movements.single')])),
         ];
+    }
+
+    public function getTitle(): string
+    {
+        return __('app.edit', ['record' => __('app.movements.single')]);
     }
 
     protected function mutateFormDataBeforeSave(array $data): array

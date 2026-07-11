@@ -20,10 +20,11 @@ class ExpectationsTable
         return $table
             ->columns([
                 TextColumn::make('category.name')
-                    ->label('Category')
+                    ->label(__('app.expectations.fields.movement_category'))
                     ->sortable()
                     ->searchable(),
                 TextColumn::make('year')
+                    ->label(__('app.hatsuhi.year'))
                     ->sortable()
                     ->searchable(),
                 TextColumn::make('amount')
@@ -33,9 +34,9 @@ class ExpectationsTable
                         return $symbol.$record->amount;
                     })
                     ->sortable()
-                    ->label('Yearly Amount'),
+                    ->label(__('app.expectations.fields.amount')),
                 TextColumn::make('monthly_amount')
-                    ->label('Monthly')
+                    ->label(__('app.expectations.fields.monthly_amount'))
                     ->state(function ($record) {
                         $symbol = $record->user->currency->symbol ?? '$';
 
@@ -52,6 +53,7 @@ class ExpectationsTable
             ])
             ->filters([
                 SelectFilter::make('year')
+                    ->label(__('app.hatsuhi.year'))
                     ->options(function () {
                         $years = Expectation::query()->where('user_id', auth()->id())
                             ->distinct('year')
@@ -64,7 +66,7 @@ class ExpectationsTable
             ])
             ->groups([
                 Group::make('year')
-                    ->label('Year')
+                    ->label(__('app.hatsuhi.year'))
                     ->collapsible(),
             ])
             ->defaultGroup('year')

@@ -8,4 +8,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateMovementType extends CreateRecord
 {
     protected static string $resource = MovementTypeResource::class;
+
+    public function getTitle(): string
+    {
+        return __('app.create', ['record' => __('app.movement_types.single')]);
+    }
 }

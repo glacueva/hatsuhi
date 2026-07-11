@@ -16,6 +16,7 @@ class MovementForm
         return $schema
             ->components([
                 Select::make('movement_category_id')
+                    ->label(__('app.movements.fields.category'))
                     ->options(function () {
                         return MovementCategory::query()
                             ->where('user_id', auth()->id())
@@ -25,13 +26,14 @@ class MovementForm
                             ->map(fn ($group) => $group->pluck('name', 'id'))
                             ->toArray();
                     })
-                    ->label('Category')
                     ->searchable()
                     ->preload()
                     ->required(),
                 DatePicker::make('date')
+                    ->label(__('app.movements.fields.date'))
                     ->required(),
                 TextInput::make('amount')
+                    ->label(__('app.movements.fields.amount'))
                     ->required()
                     ->numeric()
                     ->rules(['min:0.01'])
@@ -42,12 +44,14 @@ class MovementForm
                         }
                     }),
                 TextInput::make('concept')
+                    ->label(__('app.movements.fields.concept'))
                     ->required()
                     ->maxLength(255)
-                    ->placeholder('e.g., Monthly salary, Grocery shopping')
+                    ->placeholder(__('app.movements.fields.concept_placeholder'))
                     ->columnSpan(3),
                 TextInput::make('share')
-                    ->helperText('Share % (only if the account is shared)')
+                    ->label(__('app.movements.fields.share'))
+                    ->helperText(__('app.movements.fields.share_helper'))
                     ->required()
                     ->default(function () {
                         $defaultAccount = auth()->user()->accounts()->where('is_main', true)->first();
@@ -63,7 +67,8 @@ class MovementForm
                     })
                     ->rules(['between:0,100']),
                 TextInput::make('shared_amount')
-                    ->helperText('Shared Amount (only if the account is shared) (read-only)')
+                    ->label(__('app.movements.fields.shared_amount'))
+                    ->helperText(__('app.movements.fields.shared_amount_helper'))
                     ->readOnly()
                     ->default(function () {
                         $defaultAccount = auth()->user()->accounts()->where('is_main', true)->first();
@@ -72,10 +77,10 @@ class MovementForm
                     })
                     ->numeric(),
                 Select::make('account_id')
+                    ->label(__('app.movements.fields.account'))
                     ->options(function () {
                         return auth()->user()->accounts()->pluck('name', 'id');
                     })
-                    ->label('Account')
                     ->searchable()
                     ->preload()
                     ->required()
@@ -91,8 +96,8 @@ class MovementForm
                         }
                     }),
                 Toggle::make('is_compensation')
-                    ->label('Is it a Compensation?')
-                    ->helperText('A compensation happens when a refund happens: e.g you have to refund money from a previous Income Movement and you do not want to edit that Movement. It happens also the other way round, a previous Expense is compensated for example the refund of a purchase.')
+                    ->label(__('app.movements.fields.is_compensation'))
+                    ->helperText(__('app.movements.fields.is_compensation_helper'))
                     ->default(false)
                     ->required()
                     ->columnSpan(3),

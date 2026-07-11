@@ -13,7 +13,14 @@ class ListMovements extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            CreateAction::make()
+                ->label(__('app.create', ['record' => __('app.movements.single')]))
+                ->icon('heroicon-o-plus'),
         ];
+    }
+
+    public function getTitle(): string
+    {
+        return __('app.movements.title');
     }
 }

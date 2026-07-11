@@ -11,15 +11,20 @@ class CurrencyInfolist
     {
         return $schema
             ->components([
-                TextEntry::make('name'),
-                TextEntry::make('short'),
-                TextEntry::make('symbol'),
+                TextEntry::make('name')
+                    ->label(__('app.currencies.fields.name')),
+                TextEntry::make('short')
+                    ->label(__('app.currencies.fields.short')),
+                TextEntry::make('symbol')
+                    ->label(__('app.currencies.fields.symbol')),
                 TextEntry::make('created_at')
                     ->dateTime()
-                    ->placeholder('-'),
+                    ->placeholder('-')
+                    ->label(__('app.users.fields.created_at')),
                 TextEntry::make('updated_at')
                     ->dateTime()
-                    ->placeholder('-'),
+                    ->placeholder('-')
+                    ->label(__('app.users.fields.updated_at')),
             ]);
     }
 }

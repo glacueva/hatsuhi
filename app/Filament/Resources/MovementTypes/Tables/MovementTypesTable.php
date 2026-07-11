@@ -21,19 +21,19 @@ class MovementTypesTable
                     ->searchable(),
                 IconColumn::make('is_positive')
                     ->boolean()
-                    ->label('Type')
+                    ->label(__('app.movement_types.fields.is_positive'))
                     ->getStateUsing(function ($record) {
-                        return $record->is_positive ? 'Income' : 'Expense';
+                        return $record->is_positive ? __('app.hatsuhi.income') : __('app.hatsuhi.expense');
                     })
                     ->icon(function ($state) {
-                        return $state === 'Income' ? 'heroicon-o-arrow-up' : 'heroicon-o-arrow-down';
+                        return $state === __('app.hatsuhi.income') ? 'heroicon-o-arrow-up' : 'heroicon-o-arrow-down';
                     })
                     ->color(function ($state) {
-                        return $state === 'Income' ? 'success' : 'danger';
+                        return $state === __('app.hatsuhi.income') ? 'success' : 'danger';
                     }),
                 TextColumn::make('categories_count')
                     ->counts('categories')
-                    ->label('Categories')
+                    ->label(__('app.categories.title'))
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()
@@ -47,10 +47,10 @@ class MovementTypesTable
             ->filters([
                 SelectFilter::make('is_positive')
                     ->options([
-                        '1' => 'Income',
-                        '0' => 'Expense',
+                        '1' => __('app.hatsuhi.income'),
+                        '0' => __('app.hatsuhi.expense'),
                     ])
-                    ->label('Type'),
+                    ->label(__('app.movement_types.fields.is_positive')),
             ])
             ->recordActions([
                 ViewAction::make(),

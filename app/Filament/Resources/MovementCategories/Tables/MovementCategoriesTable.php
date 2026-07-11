@@ -17,7 +17,7 @@ class MovementCategoriesTable
         return $table
             ->columns([
                 TextColumn::make('movementType.name')
-                    ->label('Type')
+                    ->label(__('app.categories.fields.movement_type'))
                     ->sortable()
                     ->badge()
                     ->color(fn ($state) => $state === 'Income' ? 'primary' : 'danger'),
@@ -25,11 +25,11 @@ class MovementCategoriesTable
                     ->searchable(),
                 TextColumn::make('movements_count')
                     ->counts('movements')
-                    ->label('Transactions')
+                    ->label(__('app.categories.columns.transactions'))
                     ->sortable(),
                 TextColumn::make('expectations_count')
                     ->counts('expectations')
-                    ->label('Budgets')
+                    ->label(__('app.categories.columns.budgets'))
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()
@@ -43,7 +43,7 @@ class MovementCategoriesTable
             ->filters([
                 SelectFilter::make('movement_type_id')
                     ->relationship('movementType', 'name')
-                    ->label('Movement Type')
+                    ->label(__('app.categories.fields.movement_type'))
                     ->searchable()
                     ->preload(),
             ])

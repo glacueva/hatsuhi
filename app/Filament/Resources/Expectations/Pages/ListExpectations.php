@@ -18,15 +18,15 @@ class ListExpectations extends ListRecords
     {
         return [
             Action::make('clone_entire_year')
-                ->label('Duplicate Year Expectations')
+                ->label(__('app.expectations.actions.clone'))
                 ->color('gray')
                 ->form([
                     Select::make('from_year')
-                        ->label('Source Year')
+                        ->label(__('app.expectations.labels.source_year'))
                         ->options(fn () => Expectation::distinct()->pluck('year', 'year'))
                         ->required(),
                     TextInput::make('to_year')
-                        ->label('Destination Year')
+                        ->label(__('app.expectations.labels.destination_year'))
                         ->numeric()
                         ->default(now()->year)
                         ->required(),
@@ -42,9 +42,16 @@ class ListExpectations extends ListRecords
                         $clone->save();
                     }
                 })
-                ->successNotificationTitle('Year duplicated successfully!'),
+                ->successNotificationTitle(__('app.expectations.notifications.year_cloned_successfully')),
 
-            CreateAction::make(),
+            CreateAction::make()
+                ->label(__('app.create', ['record' => __('app.expectations.single')]))
+                ->icon('heroicon-o-plus'),
         ];
+    }
+
+    public function getTitle(): string
+    {
+        return __('app.expectations.title');
     }
 }
