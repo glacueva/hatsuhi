@@ -21,8 +21,8 @@ class ExpenseBudgetVsActualExpense extends ChartWidget
     protected function getData(): array
     {
         $user = auth()->user();
-        $currentYear = $this->pageFilters['year'] ?? now()->year;
-        $selectedAccount = $this->pageFilters['account'] ?? null;
+        $currentYear = empty($this->pageFilters['year']) ? now()->year : $this->pageFilters['year'];
+        $selectedAccount = empty($this->pageFilters['account']) ? null : $this->pageFilters['account'];
 
         // Get monthly budget data
         $monthlyBudgets = ExpenseExpectedView::where('user_id', $user->id)

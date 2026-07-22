@@ -15,7 +15,7 @@ class Dashboard extends BaseDashboard
     protected function getHeaderActions(): array
     {
         return [
-            FilterAction::make('Filter by Date')
+            FilterAction::make()
                 ->schema([
                     Select::make('account')
                         ->label(__('app.accounts.single'))

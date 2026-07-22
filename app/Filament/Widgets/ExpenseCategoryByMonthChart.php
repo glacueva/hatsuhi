@@ -31,12 +31,12 @@ class ExpenseCategoryByMonthChart extends ChartWidget
 
     protected function getData(): array
     {
-        $selectedYear = $this->pageFilters['year'] ?? now()->year;
-        $selectedMonth = $this->pageFilters['month'] ?? now()->month;
-        $selectedAccount = $this->pageFilters['account'] ?? null;
+        $selectedMonth = empty($this->pageFilters['month']) ? now()->month : $this->pageFilters['month'];
+        $currentYear = empty($this->pageFilters['year']) ? now()->year : $this->pageFilters['year'];
+        $selectedAccount = empty($this->pageFilters['account']) ? null : $this->pageFilters['account'];
 
         $data = ExpenseMovementCategoryView::where('month', $selectedMonth)
-            ->where('year', $selectedYear)
+            ->where('year', $currentYear)
             ->when($selectedAccount, function ($query) use ($selectedAccount): void {
                 $query->where('account_id', $selectedAccount);
             })

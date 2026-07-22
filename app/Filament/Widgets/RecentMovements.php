@@ -28,9 +28,9 @@ class RecentMovements extends TableWidget
 
     public function table(Table $table): Table
     {
-        $selectedYear = $this->pageFilters['year'] ?? now()->year;
-        $selectedMonth = $this->pageFilters['month'] ?? now()->month;
-        $selectedAccount = $this->pageFilters['account'] ?? null;
+        $selectedMonth = empty($this->pageFilters['month']) ? now()->month : $this->pageFilters['month'];
+        $selectedYear = empty($this->pageFilters['year']) ? now()->year : $this->pageFilters['year'];
+        $selectedAccount = empty($this->pageFilters['account']) ? null : $this->pageFilters['account'];
 
         return $table
             ->query(function () use ($selectedYear, $selectedMonth, $selectedAccount): Builder {

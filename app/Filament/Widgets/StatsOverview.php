@@ -22,9 +22,9 @@ class StatsOverview extends StatsOverviewWidget
     protected function getStats(): array
     {
         $user = auth()->user();
-        $currentYear = $this->pageFilters['year'] ?? now()->year;
-        $currentMonth = $this->pageFilters['month'] ?? now()->month;
-        $selectedAccount = $this->pageFilters['account'] ?? null;
+        $currentYear = empty($this->pageFilters['year']) ? now()->year : $this->pageFilters['year'];
+        $currentMonth = empty($this->pageFilters['month']) ? now()->month : $this->pageFilters['month'];
+        $selectedAccount = empty($this->pageFilters['account']) ? null : $this->pageFilters['account'];
 
         // Regular user stats
         // TODO: Refactor to use the new views instead of raw queries
