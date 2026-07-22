@@ -41,6 +41,7 @@ class ExpenseCategoryByMonthChart extends ChartWidget
                 $query->where('account_id', $selectedAccount);
             })
             ->where('user_id', auth()->id())
+            ->havingRaw('SUM(total_amount) > 0')
             ->groupBy('category_id', 'name')
             ->selectRaw('sum(total_amount) as total_amount, name, category_id')
             ->get()

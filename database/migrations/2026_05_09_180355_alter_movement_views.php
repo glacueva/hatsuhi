@@ -42,19 +42,33 @@ return new class extends Migration
 
         DB::statement('
             CREATE OR REPLACE VIEW expense_movements_by_category_month_year AS
-                SELECT 
-                    m.user_id,
-                    m.account_id,
-                    mc.id as category_id,
-                    mc.name,
-                    YEAR(m.date) as year, 
-                    MONTH(m.date) as month, 
-                    SUM(m.shared_amount) as total_amount
-                FROM movements m
-                JOIN movement_categories mc ON m.movement_category_id = mc.id
-                JOIN movement_types mt ON mc.movement_type_id = mt.id
-                WHERE mt.is_positive = 0
-                GROUP BY m.user_id, m.account_id, mc.id, mc.name, YEAR(m.date), MONTH(m.date);
+                select
+                    `m`.`user_id` AS `user_id`,
+                    `m`.`account_id` AS `account_id`,
+                    `mc`.`id` AS `category_id`,
+                    `mc`.`name` AS `name`,
+                    year(`m`.`date`) AS `year`,
+                    month(`m`.`date`) AS `month`,
+                    SUM(
+                        case 
+                            when `m`.`is_compensation` = 1 and `mt`.`is_positive` = 1 then `m`.`shared_amount` 
+                            when `mt`.`is_positive` = 0 and `m`.`is_compensation` = 0 then `m`.`shared_amount` 
+                            else (`m`.`shared_amount` * -1) 
+                        END
+                    ) AS `total_amount`
+                from
+                    `movements` `m`
+                join `movement_categories` `mc` on
+                    `m`.`movement_category_id` = `mc`.`id`
+                join `movement_types` `mt` on
+                    `mc`.`movement_type_id` = `mt`.`id`
+                group by
+                    `m`.`user_id`,
+                    `m`.`account_id`,
+                    `mc`.`id`,
+                    `mc`.`name`,
+                    year(`m`.`date`),
+                    month(`m`.`date`);
         ');
     }
 
