@@ -38,8 +38,9 @@ class ExpenseBudgetVsActualExpense extends ChartWidget
             ->when($selectedAccount, function ($query) use ($selectedAccount): void {
                 $query->where('account_id', $selectedAccount);
             })
-            ->select('month', 'total_amount')
+            ->selectRaw('month, SUM(total_amount) as total_amount')
             ->orderBy('month')
+            ->groupBy('month')
             ->get()
             ->pluck('total_amount', 'month')
             ->toArray();
