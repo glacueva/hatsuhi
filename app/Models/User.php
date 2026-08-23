@@ -75,6 +75,11 @@ class User extends Authenticatable implements FilamentUser
         return $this->accounts()->where('is_shared', true);
     }
 
+    public function tags()
+    {
+        return $this->hasMany(Tag::class);
+    }
+
     // Filament access
     public function canAccessPanel(Panel $panel): bool
     {

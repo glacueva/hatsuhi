@@ -6,6 +6,7 @@ return [
     'view' => 'Veure :record',
     'delete' => 'Eliminar :record',
     'hatsuhi' => [
+        'must_include_all_tags' => 'Ha d\'incloure tots els tags',
         'income' => 'Ingressos',
         'expense' => 'Despeses',
         'actual' => 'Real',
@@ -130,6 +131,7 @@ return [
             'shared_amount' => 'Import compartit',
             'shared_amount_helper' => 'Import compartit (només si el compte és compartit) (només lectura)',
             'account' => 'Compte',
+            'tags_helper' => 'Pots seleccionar les etiquetes que pertanyen al moviment. Si no hi ha cap etiqueta, pots crear-ne una nova.',
             'is_compensation' => 'Reemborsament',
             'is_compensation_helper' => 'Un reemborsament es produeix quan es fa un moviment de compensació: p. ex., has de retornar diners d\'un moviment d\'ingressos anterior i no vols editar aquest moviment. També passa a l\'inrevés: una despesa anterior es compensa, per exemple el reemborsament d\'una compra.',
         ],
@@ -147,5 +149,8 @@ return [
             'created_at' => 'Creat el',
             'updated_at' => 'Actualitzat el',
         ],
+    ],
+    'validation' => [
+        'tags_invalid' => 'Alguna de les etiquetes seleccionades no pertany a l\'usuari del moviment.',
     ],
 ];

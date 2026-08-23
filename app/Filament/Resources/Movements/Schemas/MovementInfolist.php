@@ -33,6 +33,10 @@ class MovementInfolist
                 IconEntry::make('is_compensation')
                     ->boolean()
                     ->label(__('app.movements.fields.is_compensation')),
+                TextEntry::make('tags')
+                    ->getStateUsing(function ($record) {
+                        return $record->tags->pluck('name')->join('# ');
+                    }),
                 TextEntry::make('created_at')
                     ->dateTime()
                     ->placeholder('-'),

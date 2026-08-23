@@ -13,6 +13,8 @@ use Filament\Actions\ExportBulkAction;
 use Filament\Actions\ImportAction;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\Summarizers\Sum;
@@ -91,10 +93,14 @@ class MovementsTable
                 Filter::make('date')
                     ->form([
                         DatePicker::make('date_from')
-                            ->label(__('app.hatsuhi.widgets.date_from')),
+                            ->label(__('app.hatsuhi.widgets.date_from'))
+                            ->columnSpan(1),
                         DatePicker::make('date_until')
-                            ->label(__('app.hatsuhi.widgets.date_until')),
+                            ->label(__('app.hatsuhi.widgets.date_until'))
+                            ->columnSpan(1),
                     ])
+                    ->columnSpan(2)
+                    ->columns(2)
                     ->query(function (Builder $query, array $data): Builder {
                         return $query
                             ->when($data['date_from'],
@@ -104,8 +110,52 @@ class MovementsTable
                                 fn (Builder $query, $date): Builder => $query->whereDate('date', '<=', $date),
                             );
                     }),
+                Filter::make('tags')
+                    ->form([
+                        Select::make('tags')
+                            ->hiddenLabel()
+                            ->relationship('tags', 'name')
+                            ->multiple()
+                            ->searchable()
+                            ->preload()
+                            ->columnSpan(1),
+                        Toggle::make('tags_filter')
+                            ->label(__('app.hatsuhi.must_include_all_tags'))
+                            ->default(false)
+                            ->inline()
+                            ->columnSpan(1),
+                    ])
+                    ->columns(2)
+                    ->columnSpan(2)
+                    ->query(function (Builder $query, array $data): Builder {
+                        $selectedTags = array_values(array_filter($data['tags'] ?? [], fn ($tagId): bool => ! empty($tagId)));
+
+                        if (empty($selectedTags)) {
+                            return $query;
+                        }
+
+                        $matchAll = (bool) ($data['tags_filter'] ?? false);
+
+                        if ($matchAll) {
+                            $query->where(function (Builder $tagQuery) use ($selectedTags): void {
+                                foreach ($selectedTags as $tagId) {
+                                    $tagQuery->whereHas('tags', function ($q) use ($tagId): void {
+                                        $q->where('tags.id', $tagId);
+                                    });
+                                }
+                            });
+
+                            return $query;
+                        }
+
+                        return $query->whereHas('tags', function ($q) use ($selectedTags): void {
+                            $q->whereIn('tags.id', $selectedTags);
+                        });
+                    })
+                    ->columns(2),
 
             ])
+            ->filtersFormColumns(2)
             ->recordActions([
                 ViewAction::make()
                     ->iconButton(),

@@ -3,10 +3,13 @@
 namespace App\Filament\Resources\Movements\Schemas;
 
 use App\Models\MovementCategory;
+use App\Models\Tag;
+use App\Rules\TagValidationRule;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
 class MovementForm
@@ -43,39 +46,6 @@ class MovementForm
                             $set('shared_amount', round($state * ($get('share') / 100), 2));
                         }
                     }),
-                TextInput::make('concept')
-                    ->label(__('app.movements.fields.concept'))
-                    ->required()
-                    ->maxLength(255)
-                    ->placeholder(__('app.movements.fields.concept_placeholder'))
-                    ->columnSpan(3),
-                TextInput::make('share')
-                    ->label(__('app.movements.fields.share'))
-                    ->helperText(__('app.movements.fields.share_helper'))
-                    ->required()
-                    ->default(function () {
-                        $defaultAccount = auth()->user()->accounts()->where('is_main', true)->first();
-
-                        return $defaultAccount ? $defaultAccount->share : 0;
-                    })
-                    ->numeric()
-                    ->live(onBlur: true)
-                    ->afterStateUpdated(function ($state, callable $set): void {
-                        if ($state) {
-                            $set('shared_amount', round(0 * ($state / 100), 2));
-                        }
-                    })
-                    ->rules(['between:0,100']),
-                TextInput::make('shared_amount')
-                    ->label(__('app.movements.fields.shared_amount'))
-                    ->helperText(__('app.movements.fields.shared_amount_helper'))
-                    ->readOnly()
-                    ->default(function () {
-                        $defaultAccount = auth()->user()->accounts()->where('is_main', true)->first();
-
-                        return $defaultAccount ? round(0 * ($defaultAccount->share / 100), 2) : 0;
-                    })
-                    ->numeric(),
                 Select::make('account_id')
                     ->label(__('app.movements.fields.account'))
                     ->options(function () {
@@ -95,12 +65,77 @@ class MovementForm
                             $set('shared_amount', $account && $account->share ? round(0 * ($account->share / 100), 2) : 0);
                         }
                     }),
+                TextInput::make('concept')
+                    ->label(__('app.movements.fields.concept'))
+                    ->required()
+                    ->maxLength(255)
+                    ->placeholder(__('app.movements.fields.concept_placeholder'))
+                    ->columnSpan(4),
+                Section::make(__('app.movements.fields.share'))
+                    ->schema([
+                        TextInput::make('share')
+                            ->label(__('app.movements.fields.share'))
+                            ->helperText(__('app.movements.fields.share_helper'))
+                            ->required()
+                            ->default(function () {
+                                $defaultAccount = auth()->user()->accounts()->where('is_main', true)->first();
+
+                                return $defaultAccount ? $defaultAccount->share : 0;
+                            })
+                            ->numeric()
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(function ($state, callable $set): void {
+                                if ($state) {
+                                    $set('shared_amount', round(0 * ($state / 100), 2));
+                                }
+                            })
+                            ->columnSpan(1)
+                            ->rules(['between:0,100']),
+                        TextInput::make('shared_amount')
+                            ->label(__('app.movements.fields.shared_amount'))
+                            ->helperText(__('app.movements.fields.shared_amount_helper'))
+                            ->readOnly()
+                            ->default(function () {
+                                $defaultAccount = auth()->user()->accounts()->where('is_main', true)->first();
+
+                                return $defaultAccount ? round(0 * ($defaultAccount->share / 100), 2) : 0;
+                            })
+                            ->columnSpan(1)
+                            ->numeric(),
+                    ])
+                    ->columns(2)
+                    ->columnSpan(2)
+                    ->collapsible(),
+                Section::make('Tags')
+                    ->schema([
+                        Select::make('tags')
+                            ->helperText(__('app.movements.fields.tags_helper'))
+                            ->relationship('tags', 'name')
+                            ->multiple()
+                            ->preload()
+                            ->searchable()
+                        // Filtramos las opciones para que solo muestren las tags del usuario seleccionado
+                            ->options(function ($get) {
+                                return Tag::where('user_id', auth()->user()->id)->pluck('name', 'id');
+                            })
+                        // Permitir crear un nuevo tag al vuelo
+                            ->createOptionForm([
+                                TextInput::make('name')
+                                    ->required()
+                                    ->maxLength(30),
+                            ])
+                            ->rules([new TagValidationRule]),
+
+                    ])
+                    ->secondary()
+                    ->columnSpan(2)
+                    ->collapsible(),
                 Toggle::make('is_compensation')
                     ->label(__('app.movements.fields.is_compensation'))
                     ->helperText(__('app.movements.fields.is_compensation_helper'))
                     ->default(false)
                     ->required()
-                    ->columnSpan(3),
-            ])->columns(3);
+                    ->columnSpan(4),
+            ])->columns(4);
     }
 }

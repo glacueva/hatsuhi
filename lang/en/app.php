@@ -6,6 +6,7 @@ return [
     'view' => 'View :record',
     'delete' => 'Delete :record',
     'hatsuhi' => [
+        'must_include_all_tags' => 'Must include all tags',
         'income' => 'Income',
         'expense' => 'Expense',
         'actual' => 'Actual',
@@ -144,8 +145,12 @@ return [
             'shared_amount' => 'Shared Amount',
             'shared_amount_helper' => 'Shared Amount (only if the account is shared) (read-only)',
             'account' => 'Account',
+            'tags_helper' => 'You can select the tags that belong to the movement. If there are no tags, you can create a new one.',
             'is_compensation' => 'Refund',
             'is_compensation_helper' => 'A refund happens when a compensation movement happens: e.g you have to give back money from a previous Income Movement and you do not want to edit that Movement. It happens also the other way round, a previous Expense is compensated for example the refund of a purchase.',
         ],
+    ],
+    'validation' => [
+        'tags_invalid' => 'One or more of the selected tags do not belong to the movement user.',
     ],
 ];

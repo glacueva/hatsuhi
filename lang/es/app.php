@@ -6,6 +6,7 @@ return [
     'view' => 'Ver :record',
     'delete' => 'Eliminar :record',
     'hatsuhi' => [
+        'must_include_all_tags' => 'Debe incluir todos los tags',
         'income' => 'Ingresos',
         'expense' => 'Gastos',
         'actual' => 'Real',
@@ -144,8 +145,12 @@ return [
             'shared_amount' => 'Importe compartido',
             'shared_amount_helper' => 'Importe compartido (solo si la cuenta es compartida) (solo lectura)',
             'account' => 'Cuenta',
+            'tags_helper' => 'Puedes seleccionar las etiquetas que pertenecen al movimiento. Si no hay ninguna etiqueta, puedes crear una nueva.',
             'is_compensation' => 'Reembolso',
             'is_compensation_helper' => 'Un reembolso ocurre cuando se realiza un movimiento de compensación: p.ej. debes devolver dinero de un movimiento de ingreso previo y no quieres editar ese movimiento. También sucede al revés, una previa gasto se compensa, por ejemplo el reembolso de una compra.',
         ],
+    ],
+    'validation' => [
+        'tags_invalid' => 'Una o más de las etiquetas seleccionadas no pertenecen al usuario del movimiento.',
     ],
 ];

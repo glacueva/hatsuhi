@@ -51,6 +51,14 @@ class Movement extends Model
         return $this->belongsTo(Account::class)->where('user_id', auth()->id());
     }
 
+    public function tags()
+    {
+        return $this->belongsToMany(
+            Tag::class,
+            'movement_tags',
+        )->where('user_id', auth()->id());
+    }
+
     // Helper method to check if movement is positive
     public function isPositive()
     {

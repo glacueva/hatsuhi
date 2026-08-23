@@ -6,6 +6,7 @@ return [
     'view' => '查看 :record',
     'delete' => '删除 :record',
     'hatsuhi' => [
+        'must_include_all_tags' => 'Must include all tags',
         'income' => '收入',
         'expense' => '支出',
         'actual' => '实际',
@@ -130,6 +131,7 @@ return [
             'shared_amount' => '共享金额',
             'shared_amount_helper' => '共享金额（仅当账户为共享账户时）（只读）',
             'account' => '账户',
+            'tags_helper' => '您可以选择属于该交易的标签。如果没有标签，您可以创建一个新的。',
             'is_compensation' => '退款',
             'is_compensation_helper' => '当发生补偿交易时会产生退款：例如，你需要退还之前的收入交易中的钱并且不想编辑该交易。相反也会发生，即之前的支出被补偿，例如购物退款。',
         ],
@@ -147,5 +149,8 @@ return [
             'created_at' => '创建于',
             'updated_at' => '更新于',
         ],
+    ],
+    'validation' => [
+        'tags_invalid' => '所选标签中有一个或多个不属于交易用户。',
     ],
 ];
