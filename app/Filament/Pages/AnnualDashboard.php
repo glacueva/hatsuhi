@@ -32,8 +32,8 @@ class AnnualDashboard extends BaseDashboard
     {
         return [
             AnnualStatsOverview::class,
-            AnnualExpenseBudgetRadarChart::class,
-            AnnualIncomeBudgetRadarChart::class,
+            //AnnualExpenseBudgetRadarChart::class,
+            //AnnualIncomeBudgetRadarChart::class,
             AnnualIncomeVsExpenseChart::class,
             AnnualExpenseCategoriesChart::class,
         ];

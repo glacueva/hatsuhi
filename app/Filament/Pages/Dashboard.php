@@ -3,6 +3,12 @@
 namespace App\Filament\Pages;
 
 use App\Enums\Month;
+use App\Filament\Widgets\ActualIncomeVsActualExpense;
+use App\Filament\Widgets\ExpenseBudgetVsActualExpense;
+use App\Filament\Widgets\ExpenseCategoryByMonthChart;
+use App\Filament\Widgets\IncomeBudgetVsActualIncome;
+use App\Filament\Widgets\RecentMovements;
+use App\Filament\Widgets\StatsOverview;
 use Filament\Forms\Components\Select;
 use Filament\Pages\Dashboard\Actions\FilterAction;
 use Filament\Pages\Dashboard as BaseDashboard;
@@ -11,6 +17,18 @@ use Filament\Pages\Dashboard\Concerns\HasFiltersAction;
 class Dashboard extends BaseDashboard
 {
     use HasFiltersAction;
+
+    public function getWidgets(): array
+    {
+        return [
+            StatsOverview::class,
+            IncomeBudgetVsActualIncome::class,
+            ExpenseBudgetVsActualExpense::class,
+            ActualIncomeVsActualExpense::class,
+            ExpenseCategoryByMonthChart::class,
+            RecentMovements::class,
+        ];
+    }
 
     protected function getHeaderActions(): array
     {
